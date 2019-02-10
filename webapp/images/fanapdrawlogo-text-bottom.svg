@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 250 300.788">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #f90;
+      }
+
+      .cls-2, .cls-3 {
+        fill: #fff;
+      }
+
+      .cls-2 {
+        opacity: 0.9;
+      }
+
+      .cls-4 {
+        fill: #e6e6e6;
+      }
+
+      .cls-5 {
+        fill: #79736e;
+        font-size: 34px;
+        font-family: SegoeUI-Bold, Segoe UI;
+        font-weight: 700;
+      }
+    </style>
+  </defs>
+  <g id="Group_16" data-name="Group 16" transform="translate(-144 -144)">
+    <g id="Group_14" data-name="Group 14" transform="translate(144 144)">
+      <g id="Group_13" data-name="Group 13">
+        <path id="Path_30" data-name="Path 30" class="cls-1" d="M12.207,0H237.793A12.207,12.207,0,0,1,250,12.207V237.793A12.207,12.207,0,0,1,237.793,250H12.207A12.207,12.207,0,0,1,0,237.793V12.207A12.207,12.207,0,0,1,12.207,0Z"/>
+        <g id="Group_12" data-name="Group 12" transform="translate(39.817 15.137)">
+          <g id="Group_11" data-name="Group 11">
+            <path id="Path_25" data-name="Path 25" class="cls-2" d="M1739.334,317.625l-4.884,4.895h0l-22.1,22.466c-40.119,35.574-84.823,4.164-89.294-27.28,14.95,17.944,31.3,19.879,51.406-.273l4.883-4.9h0l22.1-22.464c40.121-35.575,85.4-4.2,89.873,27.244-14.946-17.943-31.872-19.846-51.982.31" transform="translate(-1622.11 -182.957)"/>
+            <path id="Path_26" data-name="Path 26" class="cls-3" d="M1673.412,222.079l-36.593,37.377c-13.922,16.246-17.58,32.793-14.643,47.416,7.563,8.977,15.736,14.115,24.322,14.115a22.953,22.953,0,0,0,2.413-.129c.281-5.875,2.72-11.922,8.21-17.4l48.892-48.775ZM1644.4,340.552a47.424,47.424,0,0,0,19.527,8.366,52.847,52.847,0,0,1-19.527-8.366" transform="translate(-1621.233 -172.083)"/>
+            <path id="Path_27" data-name="Path 27" class="cls-4" d="M1623.374,329.551c.585,2.908,1.648,14.047,14.4,27.216,15.049,13.936,26.042,14.947,33.237,15.677-11.187-3.046-21.528-15.839-20.9-29.037-.813.085-1.864,0-2.663,0-8.587,0-16.51-4.88-24.071-13.856" transform="translate(-1622.422 -194.748)"/>
+            <rect id="Rectangle_5" data-name="Rectangle 5" class="cls-3" width="35.385" height="35.385" transform="translate(27.137 25.021) rotate(-45)"/>
+            <path id="Path_28" data-name="Path 28" class="cls-3" d="M1777.39,277.572c18.988,6.33,10.478,26.339,10.014,26.365-.153,6.041-2.575,12.287-8.23,17.927l-48.892,48.775,32.6,32.6,36.591-37.377c32.76-38.24,7.3-79.543-22.087-88.294" transform="translate(-1644.48 -183.66)"/>
+            <path id="Path_29" data-name="Path 29" class="cls-4" d="M1776.088,272.8c11.038,3.007,21.2,15.7,20.871,28.694.464-.028.924-.043,1.383-.043,8.68,0,16.885,5.2,25.038,14.193-1.12-7.873-5.622-19.262-16.755-29.405a53.177,53.177,0,0,0-30.537-13.438" transform="translate(-1654.037 -181.221)"/>
+          </g>
+        </g>
+      </g>
+    </g>
+    <g id="Group_15" data-name="Group 15" transform="translate(167.716 407.788)">
+      <text id="POD_DRAW" data-name="POD DRAW" class="cls-5" transform="translate(9 28)"><tspan x="0" y="0">POD </tspan><tspan class="cls-1" y="0">DRAW</tspan></text>
+    </g>
+  </g>
+</svg>
