@@ -363,7 +363,6 @@ Format.prototype.refresh = function()
 	label.style.paddingTop = '8px';
 	label.style.height = (mxClient.IS_QUIRKS) ? '34px' : '25px';
 	label.style.width = '100%';
-	label.style.cursor = 'pointer';
 	this.container.appendChild(div);
 	
 	if (graph.isSelectionEmpty())
@@ -451,10 +450,6 @@ Format.prototype.refresh = function()
 			});
 			
 			mxEvent.addListener(elt, 'click', clickHandler);
-			mxEvent.addListener(elt, 'mousedown', function(evt)
-			{
-				mxEvent.consume(evt);
-			});
 			
 			if (index == ((containsLabel) ? this.labelIndex : this.currentIndex))
 			{
@@ -3568,33 +3563,22 @@ TextFormatPanel.prototype.addFont = function(container)
 							node = graph.cellEditor.textarea.firstChild;
 						}
 						
-						function getRelativeLineHeight(fontSize, css, elt)
+						function getRelativeLineHeight(fontSize, lineHeight, elt)
 						{
-							if (elt.style != null && css != null)
+							if (elt.style.lineHeight.substring(elt.style.lineHeight.length - 1) == '%')
 							{
-								var lineHeight = css.lineHeight
-								
-								if (elt.style.lineHeight.substring(elt.style.lineHeight.length - 1) == '%')
-								{
-									return parseInt(elt.style.lineHeight) / 100;
-								}
-								else
-								{
-									return (lineHeight.substring(lineHeight.length - 2) == 'px') ?
-											parseFloat(lineHeight) / fontSize : parseInt(lineHeight);
-								}
+								return parseInt(elt.style.lineHeight) / 100;
 							}
 							else
 							{
-								return '';
+								return (lineHeight.substring(lineHeight.length - 2) == 'px') ?
+										parseFloat(lineHeight) / fontSize : parseInt(lineHeight);
 							}
 						};
 						
-						function getAbsoluteFontSize(css)
+						function getAbsoluteFontSize(fontSize)
 						{
-							var fontSize = (css != null) ? css.fontSize : null;
-								
-							if (fontSize != null && fontSize.substring(fontSize.length - 2) == 'px')
+							if (fontSize.substring(fontSize.length - 2) == 'px')
 							{
 								return parseFloat(fontSize);
 							}
@@ -3602,11 +3586,12 @@ TextFormatPanel.prototype.addFont = function(container)
 							{
 								return mxConstants.DEFAULT_FONTSIZE;
 							}
-						};
+						}
 						
+						//var realCss = mxUtils.getCurrentStyle(selectedElement);
 						var css = mxUtils.getCurrentStyle(node);
-						var fontSize = getAbsoluteFontSize(css);
-						var lineHeight = getRelativeLineHeight(fontSize, css, node);
+						var fontSize = getAbsoluteFontSize(css.fontSize);
+						var lineHeight = getRelativeLineHeight(fontSize, css.lineHeight, node);
 
 						// Finds common font size
 						var elts = node.getElementsByTagName('*');
@@ -3621,8 +3606,8 @@ TextFormatPanel.prototype.addFont = function(container)
 								if (selection.containsNode(elts[i], true))
 								{
 									temp = mxUtils.getCurrentStyle(elts[i]);
-									fontSize = Math.max(getAbsoluteFontSize(temp), fontSize);
-									var lh = getRelativeLineHeight(fontSize, temp, elts[i]);
+									fontSize = Math.max(getAbsoluteFontSize(temp.fontSize), fontSize);
+									var lh = getRelativeLineHeight(fontSize, temp.lineHeight, elts[i]);
 									
 									if (lh != lineHeight || isNaN(lh))
 									{

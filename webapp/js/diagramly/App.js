@@ -230,7 +230,7 @@ App.pluginRegistry = {'4xAKTrabTpTzahoLthkwPNUn': '/plugins/explore.js',
 	'trees': '/plugins/trees/trees.js', 'import': '/plugins/import.js',
 	'replay': '/plugins/replay.js', 'anon': '/plugins/anonymize.js',
 	'tr': '/plugins/trello.js', 'f5': '/plugins/rackF5.js',
-	'tickets': '/plugins/tickets.js', 'flow': '/plugins/flow.js',
+	'tickets': '/plugins/tickets.js', 'flow': '/poddraw/webapp/plugins/flow.js',
 	'webcola': '/plugins/webcola/webcola.js', 'rnd': '/plugins/random.js',
 	'page': '/plugins/page.js'};
 

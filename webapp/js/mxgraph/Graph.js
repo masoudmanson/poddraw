@@ -33,7 +33,7 @@ mxGraph.prototype.pageScale = 1;
 			var lang = navigator.language.toLowerCase();
 			// mxGraph.prototype.pageFormat = (lang === 'en-us' || lang === 'en-ca' || lang === 'es-mx') ?
 			// 	mxConstants.PAGE_FORMAT_LETTER_PORTRAIT : mxConstants.PAGE_FORMAT_A4_PORTRAIT;
-			mxGraph.prototype.pageFormat = new mxRectangle(0,0,800, 600);
+				mxGraph.prototype.pageFormat = new mxRectangle(0,0,1366, 768);
 		}
 	}
 	catch (e)
@@ -60,12 +60,6 @@ mxGraphView.prototype.gridColor = '#e0e0e0';
 
 // Alternative text for unsupported foreignObjects
 mxSvgCanvas2D.prototype.foAltText = '[Not supported by viewer]';
-
-// Hook for custom constraints
-mxShape.prototype.getConstraints = function(style)
-{
-	return null;
-};
 
 /**
  * Constructs a new graph instance. Note that the constructor does not take a
@@ -995,6 +989,11 @@ Graph.prototype.defaultPageBackgroundColor = '#ffffff';
  *
  */
 Graph.prototype.defaultPageBorderColor = '#ffffff';
+
+/**
+ *
+ */
+Graph.prototype.defaultGraphBackground = '#ffffff';
 
 /**
  * Specifies the size of the size for "tiles" to be used for a graph with
@@ -2052,33 +2051,6 @@ Graph.prototype.replacePlaceholders = function(cell, str)
 	}
 
 	return result.join('');
-};
-
-/**
- * Resolves the given cells in the model and selects them.
- */
-Graph.prototype.restoreSelection = function(cells)
-{
-	if (cells != null && cells.length > 0)
-	{
-		var temp = [];
-
-		for (var i = 0; i < cells.length; i++)
-		{
-			var newCell = this.model.getCell(cells[i].id);
-
-			if (newCell != null)
-			{
-				temp.push(newCell);
-			}
-		}
-
-		this.setSelectionCells(temp);
-	}
-	else
-	{
-		this.clearSelection();
-	}
 };
 
 /**
@@ -4836,7 +4808,7 @@ if (typeof mxVertexHandler != 'undefined')
 
 				// Populates the mapping to fix lookups for forward refs from edges
 				// to cells in parents that are cloned later in the loop below
-// 				this.cloneCells([model.root], this.isCloneInvalidEdges(), mapping);
+				this.cloneCells([model.root], this.isCloneInvalidEdges(), mapping);
 
 				for (var i = 0; i < childCount; i++)
 				{
@@ -4889,40 +4861,34 @@ if (typeof mxVertexHandler != 'undefined')
 		{
 			if (terminal != null)
 			{
-				var constraints = (terminal.shape != null) ? terminal.shape.getConstraints(terminal.style) : null;
+				var constraints = mxUtils.getValue(terminal.style, 'points', null);
 
 				if (constraints != null)
 				{
-					return constraints;
+					// Requires an array of arrays with x, y (0..1) and an optional
+					// perimeter (0 or 1), eg. points=[[0,0,1],[0,1,0],[1,1]]
+					var result = [];
+
+					try
+					{
+						var c = JSON.parse(constraints);
+
+						for (var i = 0; i < c.length; i++)
+						{
+							var tmp = c[i];
+							result.push(new mxConnectionConstraint(new mxPoint(tmp[0], tmp[1]), (tmp.length > 2) ? tmp[2] != '0' : true));
+						}
+					}
+					catch (e)
+					{
+						// ignore
+					}
+
+					return result;
 				}
 				else
 				{
-					constraints = mxUtils.getValue(terminal.style, 'points', null);
-
-					if (constraints != null)
-					{
-						// Requires an array of arrays with x, y (0..1) and an optional
-						// perimeter (0 or 1), eg. points=[[0,0,1],[0,1,0],[1,1]]
-						var result = [];
-
-						try
-						{
-							var c = JSON.parse(constraints);
-
-							for (var i = 0; i < c.length; i++)
-							{
-								var tmp = c[i];
-								result.push(new mxConnectionConstraint(new mxPoint(tmp[0], tmp[1]), (tmp.length > 2) ? tmp[2] != '0' : true));
-							}
-						}
-						catch (e)
-						{
-							// ignore
-						}
-
-						return result;
-					}
-					else if (terminal.shape != null)
+					if (terminal.shape != null)
 					{
 						if (terminal.shape.stencil != null)
 						{
@@ -5926,7 +5892,7 @@ if (typeof mxVertexHandler != 'undefined')
 			model.beginUpdate();
 			try
 			{
-				var clones = this.cloneCells(cells, false, null, true);
+				var clones = this.cloneCells(cells, false);
 
 				for (var i = 0; i < cells.length; i++)
 				{
@@ -6252,7 +6218,7 @@ if (typeof mxVertexHandler != 'undefined')
 		 * @param {number} dy Y-coordinate of the translation.
 		 */
 		Graph.prototype.getSvg = function(background, scale, border, nocrop, crisp,
-			ignoreSelection, showText, imgExport, linkTarget, hasShadow)
+			ignoreSelection, showText, imgExport, linkTarget)
 		{
 			//Disable Css Transforms if it is used
 			var origUseCssTrans = this.useCssTransforms;
@@ -6311,8 +6277,8 @@ if (typeof mxVertexHandler != 'undefined')
 				}
 
 				var s = scale / vs;
-				var w = Math.max(1, Math.ceil(bounds.width * s) + 2 * border) + ((hasShadow) ? 5 : 0);
-				var h = Math.max(1, Math.ceil(bounds.height * s) + 2 * border) + ((hasShadow) ? 5 : 0);
+				var w = Math.max(1, Math.ceil(bounds.width * s) + 2 * border);
+				var h = Math.max(1, Math.ceil(bounds.height * s) + 2 * border);
 
 				root.setAttribute('version', '1.1');
 				root.setAttribute('width', w + 'px');
@@ -6425,7 +6391,11 @@ if (typeof mxVertexHandler != 'undefined')
 				};
 
 				imgExport.drawState(this.getView().getState(this.model.root), svgCanvas);
-				this.updateSvgLinks(root, linkTarget, true);
+
+				if (linkTarget != null)
+				{
+					this.updateLinkTargets(root, linkTarget);
+				}
 
 				return root;
 			}
@@ -6443,7 +6413,7 @@ if (typeof mxVertexHandler != 'undefined')
 		/**
 		 * Hook for creating the canvas used in getSvg.
 		 */
-		Graph.prototype.updateSvgLinks = function(node, target, removeCustom)
+		Graph.prototype.updateLinkTargets = function(node, target)
 		{
 			var links = node.getElementsByTagName('a');
 
@@ -6456,16 +6426,9 @@ if (typeof mxVertexHandler != 'undefined')
 					href = links[i].getAttribute('xlink:href');
 				}
 
-				if (href != null)
+				if (href != null && /^https?:\/\//.test(href))
 				{
-					if (target != null && /^https?:\/\//.test(href))
-					{
-						links[i].setAttribute('target', target);
-					}
-					else if (removeCustom && this.isCustomLink(href))
-					{
-						links[i].setAttribute('href', 'javascript:void(0);');
-					}
+					links[i].setAttribute('target', target);
 				}
 			}
 		};

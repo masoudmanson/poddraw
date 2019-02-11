@@ -72,7 +72,7 @@ function checkToken($access_token)
 
 if (isset($_SESSION['access_token'])) {
     $userProfileImage = checkToken($_SESSION['access_token']);
-    if($userProfileImage) {
+    if ($userProfileImage) {
         ?>
         <!--[if IE]>
         <meta http-equiv="X-UA-Compatible" content="IE=5,IE=9"><![endif]-->
@@ -117,7 +117,7 @@ if (isset($_SESSION['access_token'])) {
                  * --
                  * - networkshapes=1: For testing network shapes (temporary)
                  */
-                var urlParams = (function() {
+                var urlParams = (function () {
                     var result = new Object();
                     var params = window.location.search.slice(1).split('&');
 
@@ -148,7 +148,7 @@ if (isset($_SESSION['access_token'])) {
 
                 // Redirects page if required
                 if (urlParams['dev'] != '1') {
-                    (function() {
+                    (function () {
                         var proto = window.location.protocol;
 
                         // Electron protocol is file:
@@ -161,8 +161,8 @@ if (isset($_SESSION['access_token'])) {
                             }
 
                             var href = proto + '//' + host + window.location.href.substring(
-                                    window.location.protocol.length +
-                                    window.location.host.length + 2);
+                                window.location.protocol.length +
+                                window.location.host.length + 2);
 
                             // Redirects if href changes
                             if (href != window.location.href) {
@@ -175,7 +175,7 @@ if (isset($_SESSION['access_token'])) {
                 /**
                  * Adds meta tags with application name (depends on offline URL parameter)
                  */
-                (function() {
+                (function () {
                     function addMeta(name, content) {
                         try {
                             var s = document.createElement('meta');
@@ -323,6 +323,7 @@ if (isset($_SESSION['access_token'])) {
 			End Function
 
 
+
             </script>
             <!--<![endif]-->
 
@@ -346,7 +347,7 @@ if (isset($_SESSION['access_token'])) {
                         }
 
                         if (onLoad != null) {
-                            s.onload = s.onreadystatechange = function() {
+                            s.onload = s.onreadystatechange = function () {
                                 if (!r && (!this.readyState || this.readyState == 'complete')) {
                                     r = true;
                                     onLoad();
@@ -389,32 +390,22 @@ if (isset($_SESSION['access_token'])) {
 
                 // Changes paths for local development environment
                 if (urlParams['dev'] == '1') {
-                    // Used to request grapheditor/mxgraph sources in dev mode
-                    // var mxDevUrl = document.location.protocol + '//devhost.jgraph.com/mxgraph2';
-                    //
-                    // if (document.location.protocol == 'file:') {
-                    //   mxDevUrl = '../../mxgraph2';
-                    //
-                    //   // Forces includes for dev environment in node.js
-                    //   mxForceIncludes = true;
-                    // }
+                    mxForceIncludes = true;
+                    // mxDevUrl = 'mxgraph2';
 
-                    mxDevUrl = 'mxgraph2';
+                    // var geBasePath = mxDevUrl + '/javascript/examples/grapheditor/www/js';
+                    var geBasePath = 'js/mxgraph';
 
-                    var geBasePath = mxDevUrl + '/javascript/examples/grapheditor/www/js';
-                    var mxBasePath = mxDevUrl + '/javascript/src';
+                    // var mxBasePath = mxDevUrl + '/javascript/src';
+                    var mxBasePath = 'src';
 
-                    // Used to request draw.io sources in dev mode
-                    var drawDevUrl = '';
-
-                    if (urlParams['drawdev'] == '1') {
-                        drawDevUrl = document.location.protocol + '//drawhost.jgraph.com/';
-                    }
-
-                    mxscript(drawDevUrl + 'js/diagramly/Init.js');
+                    mxscript('js/diagramly/Init.js');
                     mxscript(geBasePath + '/Init.js');
-                    mxscript(mxDevUrl + '/javascript/src/js/mxClient.js');
 
+                    // mxscript(mxDevUrl + '/javascript/src/js/mxClient.js');
+                    mxscript(mxBasePath + '/js/mxClient.js');
+
+                    drawDevUrl = '';
                     // Adds all JS code that depends on mxClient. This indirection via Devel.js is
                     // required in some browsers to make sure mxClient.js (and the files that it
                     // loads asynchronously) are available when the code loaded in Devel.js runs.
@@ -430,7 +421,7 @@ if (isset($_SESSION['access_token'])) {
                 }
 
                 // Adds basic error handling
-                window.onerror = function() {
+                window.onerror = function () {
                     var status = document.getElementById('geStatus');
 
                     if (status != null) {
@@ -458,7 +449,7 @@ if (isset($_SESSION['access_token'])) {
             /**
              * Main
              */
-            App.main(function() {
+            App.main(function () {
                 document.getElementById("userProfileImage").src = "<?php echo $userProfileImage ?>";
             });
         </script>
