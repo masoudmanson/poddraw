@@ -648,6 +648,7 @@ space=Space
 spacing=Spacing
 specialLink=Special Link
 standard=Standard
+bardsir=Bardsir
 starting=Starting
 straight=Straight
 strokeColor=Line Color

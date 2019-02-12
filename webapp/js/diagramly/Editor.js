@@ -300,7 +300,7 @@
 
 	/**
 	 * Global configuration of the Editor
-	 * see https://desk.draw.io/solution/articles/16000058316
+		 * see https://desk.draw.io/solution/articles/16000058316
 	 *
 	 * For defaultVertexStyle, defaultEdgeStyle and defaultLibraries, this must be called before
 	 * mxSettings.load via global config variable window.mxLoadSettings = false.
@@ -3303,7 +3303,8 @@
 	mxStencilRegistry.libraries['pid2inst'] = [SHAPES_PATH + '/pid2/mxPidInstruments.js'];
 	mxStencilRegistry.libraries['pid2misc'] = [SHAPES_PATH + '/pid2/mxPidMisc.js', STENCIL_PATH + '/pid/misc.xml'];
 	mxStencilRegistry.libraries['pid2valves'] = [SHAPES_PATH + '/pid2/mxPidValves.js'];
-	mxStencilRegistry.libraries['pidFlowSensors'] = [STENCIL_PATH + '/pid/flow_sensors.xml'];
+    mxStencilRegistry.libraries['pidFlowSensors'] = [STENCIL_PATH + '/pid/flow_sensors.xml'];
+    mxStencilRegistry.libraries['bardsir'] = [SHAPES_PATH + '/bardsir/bardsir.js', STENCIL_PATH + '/bardsir/bardsir.xml'];
 
 	// Triggers dynamic loading for markers
 	mxMarker.getPackageForType = function(type)

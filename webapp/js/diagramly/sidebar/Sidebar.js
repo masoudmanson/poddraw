@@ -28,7 +28,7 @@
     /**
      *
      */
-    Sidebar.prototype.defaultEntries = 'general;uml;flowchart;basic;arrows2';//'general;uml;er;bpmn;flowchart;basic;arrows2';
+    Sidebar.prototype.defaultEntries = 'bardsir;general;flowchart;basic;arrows2';
 
     /**
      *
@@ -162,7 +162,11 @@
      */
     Sidebar.prototype.configuration = [{
         id: 'general',
-        libs: ['general', 'misc', 'advanced']
+        libs: ['general', 'advanced']
+    }, {
+        id: 'misc'
+    }, {
+        id: 'bardsir'
     }, {
         id: 'uml'
     }, {
@@ -557,6 +561,21 @@
         // Defines all entries for the sidebar. This is used in the MoreShapes dialog. Create screenshots using the savesidebar URL parameter and
         // http://www.alderg.com/merge.html for creating a vertical stack of PNG images if multiple sidebars are part of an entry.
         this.entries = [{
+            title: mxResources.get('bardsir'),
+            entries: [
+                {
+                    title: mxResources.get('procEng'),
+                    id: 'pid',
+                    image: IMAGE_PATH + '/sidebar-pid.png'
+                },
+                {
+                    title: mxResources.get('bardsir'),
+                    id: 'bardsir',
+                    image: IMAGE_PATH + '/sidebar-pid.png'
+                },
+            ]
+        },
+            {
             title: mxResources.get('standard'),
             entries: [{
                 title: mxResources.get('general'),
@@ -775,11 +794,11 @@
                         id: 'gmdl',
                         image: IMAGE_PATH + '/sidebar-gmdl.png'
                     },
-                    {
-                        title: mxResources.get('procEng'),
-                        id: 'pid',
-                        image: IMAGE_PATH + '/sidebar-pid.png'
-                    },
+                    // {
+                    //     title: mxResources.get('procEng'),
+                    //     id: 'pid',
+                    //     image: IMAGE_PATH + '/sidebar-pid.png'
+                    // },
                     // TODO add to mxResources
                     {
                         title: 'Web Icons',
@@ -1109,7 +1128,8 @@
             }
         }
 
-        this.addGeneralPalette(this.customEntries == null);
+        this.addBardsirPalette(this.customEntries == null);
+        this.addGeneralPalette(false);
         this.addMiscPalette(false);
         this.addAdvancedPalette(false);
         this.addUmlPalette(false);
@@ -1141,6 +1161,10 @@
 
         this.addStencilPalette('arrows', mxResources.get('arrows'), dir + '/arrows.xml',
             ';html=1;' + mxConstants.STYLE_VERTICAL_LABEL_POSITION + '=bottom;' + mxConstants.STYLE_VERTICAL_ALIGN + '=top;' + mxConstants.STYLE_STROKEWIDTH + '=2;strokeColor=#000000;');
+
+        // this.addStencilPalette('bardsir', 'Bardsir',
+        //     dir + '/bardsir/bardsir.xml',
+        //     ';html=1;align=center;' + mxConstants.STYLE_VERTICAL_LABEL_POSITION + '=bottom;' + mxConstants.STYLE_VERTICAL_ALIGN + '=top;dashed=0;');
 
         this.addArrows2Palette();
 

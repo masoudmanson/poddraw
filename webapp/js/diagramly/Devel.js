@@ -70,6 +70,7 @@ mxscript(drawDevUrl + 'js/diagramly/sidebar/Sidebar-Sitemap.js');
 mxscript(drawDevUrl + 'js/diagramly/sidebar/Sidebar-Sysml.js');
 mxscript(drawDevUrl + 'js/diagramly/sidebar/Sidebar-Veeam.js');
 mxscript(drawDevUrl + 'js/diagramly/sidebar/Sidebar-WebIcons.js');
+mxscript(drawDevUrl + 'js/diagramly/sidebar/Sidebar-Bardsir.js');
 
 mxscript(drawDevUrl + 'js/diagramly/util/mxJsCanvas.js');
 mxscript(drawDevUrl + 'js/diagramly/util/mxAsyncCanvas.js');

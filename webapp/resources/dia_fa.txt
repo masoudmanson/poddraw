@@ -648,6 +648,7 @@ space=‫فاصله‬
 spacing=‫فاصله‬
 specialLink=‫لینک مخصوص‬
 standard=‫استاندارد‬
+bardsir=بردسیر
 starting=‫شروع‬
 straight=‫مستقیم‬
 strokeColor=‫رنگ خط‬
