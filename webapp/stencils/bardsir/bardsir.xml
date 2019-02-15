@@ -349,5 +349,77 @@
             <stroke/>
         </foreground>
     </shape>
+    <shape aspect="variable" h="60" name="Compressor" strokewidth="inherit" w="180">
+        <connections>
+            <constraint name="N" perimeter="0" x="0.5" y="0"/>
+            <constraint name="S" perimeter="0" x="0.5" y="1"/>
+            <constraint name="W" perimeter="0" x="0" y="0.5"/>
+            <constraint name="E" perimeter="0" x="1" y="0.5"/>
+
+            <constraint name="TopLeft" perimeter="0" x="0.162" y="0"/>
+            <constraint name="BottomLeft" perimeter="0" x="0.162" y="1"/>
+
+            <constraint name="TopLeft1" perimeter="0" x="0.278" y="0"/>
+            <constraint name="BottomLeft1" perimeter="0" x="0.278" y="1"/>
+
+            <constraint name="TopLeft" perimeter="0" x="0.389" y="0"/>
+            <constraint name="BottomLeft2" perimeter="0" x="0.389" y="1"/>
+
+            <constraint name="TopLeft3" perimeter="0" x="0.611" y="0"/>
+            <constraint name="BottomLeft3" perimeter="0" x="0.611" y="1"/>
+
+            <constraint name="TopLeft4" perimeter="0" x="0.722" y="0"/>
+            <constraint name="BottomLeft4" perimeter="0" x="0.722" y="1"/>
+
+            <constraint name="TopRight" perimeter="0" x="0.838" y="0"/>
+            <constraint name="BottomRight" perimeter="0" x="0.838" y="1"/>
+        </connections>
+        <background>
+            <path>
+                <move x="27" y="3"/>
+                <arc rx="27" ry="27" x-axis-rotation="0" large-arc-flag="0" sweep-flag="0" x="27" y="57"/>
+                <close/>
+                <move x="153" y="3"/>
+                <arc rx="27" ry="27" x-axis-rotation="0" large-arc-flag="0" sweep-flag="1" x="153" y="57"/>
+                <close/>
+            </path>
+
+            <fillstroke/>
+            <roundrect x="24" y="0" w="10" h="60"/>
+            <fillstroke/>
+            <roundrect x="38" y="5" w="4" h="50"/>
+            <fillstroke/>
+            <roundrect x="46" y="0" w="8" h="60"/>
+            <fillstroke/>
+
+            <roundrect x="58" y="5" w="4" h="50"/>
+            <fillstroke/>
+            <roundrect x="66" y="0" w="8" h="60"/>
+            <fillstroke/>
+
+            <roundrect x="78" y="5" w="4" h="50"/>
+            <fillstroke/>
+            <roundrect x="86" y="0" w="8" h="60"/>
+            <fillstroke/>
+
+            <roundrect x="98" y="5" w="4" h="50"/>
+            <fillstroke/>
+            <roundrect x="106" y="0" w="8" h="60"/>
+            <fillstroke/>
+
+            <roundrect x="118" y="5" w="4" h="50"/>
+            <fillstroke/>
+            <roundrect x="126" y="0" w="8" h="60"/>
+            <fillstroke/>
+
+            <roundrect x="138" y="5" w="4" h="50"/>
+            <fillstroke/>
+            <roundrect x="146" y="0" w="10" h="60"/>
+            <fillstroke/>
+        </background>
+        <foreground>
+            <fillstroke/>
+        </foreground>
+    </shape>
 </shapes>
 

@@ -97,6 +97,7 @@ if (isset($_SESSION['access_token'])) {
             <meta name="mobile-web-app-capable" content="yes">
             <meta name="theme-color" content="#d89000">
             <script type="text/javascript">
+                window.ACCESS_TOKEN = "<?php echo $_SESSION['access_token']; ?>";
                 /**
                  * URL Parameters and protocol description are here:
                  *
@@ -451,6 +452,8 @@ if (isset($_SESSION['access_token'])) {
              */
             App.main(function () {
                 document.getElementById("userProfileImage").src = "<?php echo $userProfileImage ?>";
+
+                mxUtils.get();
             });
         </script>
         </body>
