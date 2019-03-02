@@ -64,15 +64,15 @@ function checkToken($access_token)
                 }
             }
         } else {
-            return $response->result->profileImage;
+            return json_encode(["result" => true, "profileImage" => $response->result->profileImage]);
         }
     }
     curl_close($ch);
 }
 
 if (isset($_SESSION['access_token'])) {
-    $userProfileImage = checkToken($_SESSION['access_token']);
-    if ($userProfileImage) {
+    $userProfileImage = json_decode(checkToken($_SESSION['access_token']));
+    if ($userProfileImage->result) {
         ?>
         <!--[if IE]>
         <meta http-equiv="X-UA-Compatible" content="IE=5,IE=9"><![endif]-->
@@ -451,7 +451,7 @@ if (isset($_SESSION['access_token'])) {
              * Main
              */
             App.main(function () {
-                document.getElementById("userProfileImage").src = "<?php echo $userProfileImage ?>";
+                document.getElementById("userProfileImage").src = "<?php echo $userProfileImage->profileImage ?>";
 
                 mxUtils.get();
             });
