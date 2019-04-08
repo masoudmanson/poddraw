@@ -592,6 +592,12 @@ div.mxWindow .geButton {
   box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.15);
   _filter: progid:DXImageTransform.Microsoft.DropShadow(OffX=2, OffY=2, Color='#d5d5d5', Positive='true');
   z-index: 2;
+  /*width: auto !important;*/
+  /*height: auto !important;*/
+}
+
+.geDialog > div {
+  overflow-y: visible !important;
 }
 
 .geTransDialog {

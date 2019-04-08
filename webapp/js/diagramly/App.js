@@ -153,6 +153,11 @@ App.MODE_BROWSER = 'browser';
 App.MODE_TRELLO = 'trello';
 
 /**
+ * Database App Mode
+ */
+App.MODE_DATABASE = 'database';
+
+/**
  * Sets the delay for autosave in milliseconds. Default is 2000.
  */
 App.DROPBOX_APPKEY = 'libwls2fa9szdji';
@@ -887,35 +892,35 @@ App.prototype.init = function()
 	/**
 	 * Lazy-loading for Trello
 	 */
-	// if (urlParams['embed'] != '1' || urlParams['tr'] == '1')
-	// {
-	// 	/**
-	// 	 * Creates Trello client if all required libraries are available.
-	// 	 */
-	// 	var initTrelloClient = mxUtils.bind(this, function()
-	// 	{
-	// 		if (typeof window.Trello !== 'undefined')
-	// 		{
-	// 			this.trello = new TrelloClient(this);
-	//
-	// 			//TODO we have no user info from Trello so we don't set a user
-	// 			this.trello.addListener('userChanged', mxUtils.bind(this, function()
-	// 			{
-	// 				this.updateUserElement();
-	// 				this.restoreLibraries();
-	// 			}));
-	//
-	// 			// Notifies listeners of new client
-	// 			this.fireEvent(new mxEventObject('clientLoaded', 'client', this.trello));
-	// 		}
-	// 		else if (window.DrawTrelloClientCallback == null)
-	// 		{
-	// 			window.DrawTrelloClientCallback = initTrelloClient;
-	// 		}
-	// 	});
-	//
-	// 	initTrelloClient();
-	// }
+	if (urlParams['embed'] != '1' || urlParams['tr'] == '1')
+	{
+		/**
+		 * Creates Trello client if all required libraries are available.
+		 */
+		var initTrelloClient = mxUtils.bind(this, function()
+		{
+			if (typeof window.Trello !== 'undefined')
+			{
+				this.trello = new TrelloClient(this);
+
+				//TODO we have no user info from Trello so we don't set a user
+				this.trello.addListener('userChanged', mxUtils.bind(this, function()
+				{
+					this.updateUserElement();
+					this.restoreLibraries();
+				}));
+
+				// Notifies listeners of new client
+				this.fireEvent(new mxEventObject('clientLoaded', 'client', this.trello));
+			}
+			else if (window.DrawTrelloClientCallback == null)
+			{
+				window.DrawTrelloClientCallback = initTrelloClient;
+			}
+		});
+
+		initTrelloClient();
+	}
 
 	// TEMPORARY REALTIME NOTICE FOR AFFECTED FILE TYPES
 	this.editor.addListener('fileLoaded', mxUtils.bind(this, function()
@@ -2729,6 +2734,48 @@ App.prototype.pickFile = function(mode)
 
 			input.click();
 		}
+		else if(mode == App.MODE_DATABASE) {
+            console.log("You called me fucker :D");
+            this.hideDialog();
+            window.openNew = this.getCurrentFile() != null && !this.isDiagramEmpty();
+            window.baseUrl = this.getUrl();
+            window.openKey = 'open';
+            var prevValue = Editor.useLocalStorage;
+            Editor.useLocalStorage = (mode == App.MODE_DATABASE);
+
+            this.openFile('fromDatabase');
+
+            // Installs local handler for opened files in same window
+            window.openFile.setConsumer(mxUtils.bind(this, function(xml, filename)
+            {
+                // Replaces PNG with XML extension
+                var dot = !this.useCanvasForExport && filename.substring(filename.length - 4) == '.png';
+
+                if (dot)
+                {
+                    filename = filename.substring(0, filename.length - 4) + '.xml';
+                }
+
+                this.fileLoaded((mode == App.MODE_DATABASE) ?
+                                new StorageFile(this, xml, filename) :
+                                new LocalFile(this, xml, filename));
+            }));
+
+            // Extends dialog close to show splash screen
+            var dlg = this.dialog;
+            var dlgClose = dlg.close;
+
+            this.dialog.close = mxUtils.bind(this, function(cancel)
+            {
+                Editor.useLocalStorage = prevValue;
+                dlgClose.apply(dlg, arguments);
+
+                if (this.getCurrentFile() == null)
+                {
+                    this.showSplash();
+                }
+            });
+		}
 		else
 		{
 			this.hideDialog();
@@ -3251,10 +3298,10 @@ App.prototype.getPeerForMode = function(mode)
 	{
 		return this.oneDrive;
 	}
-	else if (mode == App.MODE_TRELLO)
-	{
-		return this.trello;
-	}
+    else if (mode == App.MODE_TRELLO)
+    {
+        return this.trello;
+    }
 	else
 	{
 		return null;
@@ -3540,6 +3587,7 @@ App.prototype.fileCreated = function(file, libs, replace, done)
  */
 App.prototype.loadFile = function(id, sameWindow, file, success)
 {
+    console.log("Current mxFile", this.getCurrentFile());
 	this.hideDialog();
 
 	var fn2 = mxUtils.bind(this, function()

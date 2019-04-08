@@ -75,6 +75,60 @@
         </foreground>
 
     </shape>
+    <shape aspect="variable" h="138" name="Fan" strokewidth="inherit" w="152">
+        <connections>
+            <constraint name="W" perimeter="0" x="0" y="0.175"/>
+        </connections>
+
+        <foreground>
+            <path>
+                <move x="121" y="63"/>
+                <arc rx="2" ry="2" x-axis-rotation="0" large-arc-flag="0" sweep-flag="0" x="120" y="61"/>
+                <curve x1="112" x2="104" x3="101" y1="61" y2="65" y3="67"/>
+                <arc rx="14" ry="14" x-axis-rotation="0" large-arc-flag="0" sweep-flag="0" x="95" y="62"/>
+                <arc rx="41" ry="41" x-axis-rotation="0" large-arc-flag="0" sweep-flag="1" x="107" y="47"/>
+                <arc rx="1" ry="1" x-axis-rotation="0" large-arc-flag="0" sweep-flag="0" x="107" y="46"/>
+                <line x="97" y="41"/>
+
+                <arc rx="2" ry="2" x-axis-rotation="0" large-arc-flag="0" sweep-flag="0" x="95" y="42"/>
+                <curve x1="89" x2="88" x3="88" y1="48" y2="57" y3="60"/>
+                <arc rx="14" ry="14" x-axis-rotation="0" large-arc-flag="0" sweep-flag="0" x="80" y="63"/>
+                <curve x1="75" x2="73" x3="72" y1="57" y2="48" y3="45"/>
+                <arc rx="1" ry="1" x-axis-rotation="0" large-arc-flag="0" sweep-flag="0" x="71" y="45"/>
+                <line x="62" y="51"/>
+
+                <arc rx="2" ry="2" x-axis-rotation="0" large-arc-flag="0" sweep-flag="0" x="62" y="53"/>
+                <curve x1="65" x2="76" x3="76" y1="63" y2="68" y3="69"/>
+                <arc rx="14" ry="14" x-axis-rotation="0" large-arc-flag="0" sweep-flag="0" x="75" y="74"/>
+                <arc rx="12" ry="12" x-axis-rotation="0" large-arc-flag="0" sweep-flag="0" x="75" y="75"/>
+                <curve x1="67" x2="58" x3="55" y1="79" y2="79" y3="78"/>
+                <arc rx="1" ry="1" x-axis-rotation="0" large-arc-flag="0" sweep-flag="0" x="54" y="79"/>
+                <line x="58" y="89"/>
+
+                <arc rx="2" ry="2" x-axis-rotation="0" large-arc-flag="0" sweep-flag="0" x="59" y="90"/>
+                <curve x1="68" x2="76" x3="78" y1="90" y2="84" y3="82"/>
+                <arc rx="14" ry="14" x-axis-rotation="0" large-arc-flag="0" sweep-flag="0" x="83" y="86"/>
+                <curve x1="81" x2="76" x3="73" y1="95" y2="102" y3="104"/>
+                <arc rx="1" ry="1" x-axis-rotation="0" large-arc-flag="0" sweep-flag="0" x="74" y="105"/>
+                <line x="84" y="108"/>
+
+                <arc rx="2" ry="2" x-axis-rotation="0" large-arc-flag="0" sweep-flag="0" x="86" y="108"/>
+                <curve x1="91" x2="90" x3="90" y1="100" y2="90" y3="88"/>
+                <arc rx="14" ry="14" x-axis-rotation="0" large-arc-flag="0" sweep-flag="0" x="97" y="85"/>
+                <curve x1="102" x2="103" x3="104" y1="92" y2="101" y3="104"/>
+                <arc rx="1" ry="1" x-axis-rotation="0" large-arc-flag="0" sweep-flag="0" x="105" y="104"/>
+                <line x="114" y="99"/>
+
+                <arc rx="2" ry="2" x-axis-rotation="0" large-arc-flag="0" sweep-flag="0" x="115" y="97"/>
+                <curve x1="112" x2="101" x3="101" y1="87" y2="80" y3="80"/>
+                <arc rx="28" ry="28" x-axis-rotation="0" large-arc-flag="0" sweep-flag="0" x="103" y="74"/>
+                <curve x1="111" x2="120" x3="123" y1="72" y2="73" y3="74"/>
+                <arc rx="1" ry="1" x-axis-rotation="0" large-arc-flag="0" sweep-flag="0" x="124" y="73"/>
+                <close/>
+            </path>
+            <fillstroke/>
+        </foreground>
+    </shape>
     <shape aspect="variable" h="145" name="Pump" strokewidth="inherit" w="141">
         <connections>
             <constraint name="W" perimeter="0" x="0" y="0.182"/>

@@ -744,3 +744,5 @@ webLink=‫لینک تحت وب‬
 wireframes=‫قاب خط‬
 searchByAttribute=جستجو براساس برچسب ها
 searchByAttributePlaceholder=جستجو براساس برچسب ها (پیشفرض: tags)
+fromDatabase=از پایگاه داده
+getListFromDatabase=دریافت لیست فایل ها از دیتابیس

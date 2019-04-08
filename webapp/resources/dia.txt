@@ -744,3 +744,5 @@ webLink=Web Link
 wireframes=Wireframes
 searchByAttribute=Search By Attribute
 searchByAttributePlaceholder=Search By Attribute (Default attr: tags)
+fromDatabase=From Database
+getListFromDatabase=Get files list from database

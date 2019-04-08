@@ -314,17 +314,14 @@ if (isset($_SESSION['access_token'])) {
 
             <!--[if (IE 9)|(IE 10)]><!-->
             <script type="text/vbscript">
-    Function mxUtilsBinaryToArray(Binary)
-				Dim i
-				ReDim byteArray(LenB(Binary))
-				For i = 1 To LenB(Binary)
-					byteArray(i-1) = AscB(MidB(Binary, i, 1))
-				Next
-				mxUtilsBinaryToArray = byteArray
-			End Function
-
-
-
+                Function mxUtilsBinaryToArray(Binary)
+                    Dim i
+                    ReDim byteArray(LenB(Binary))
+                    For i = 1 To LenB(Binary)
+                        byteArray(i-1) = AscB(MidB(Binary, i, 1))
+                    Next
+                    mxUtilsBinaryToArray = byteArray
+                End Function
             </script>
             <!--<![endif]-->
 
