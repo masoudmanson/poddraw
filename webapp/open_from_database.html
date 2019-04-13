@@ -4,9 +4,138 @@
     <title>Open Diagram</title>
     <link rel="stylesheet" type="text/css" href="styles/grapheditor.css" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script type="text/javascript" src="js/podasync.min.js"></script>
 </head>
 <script type="text/javascript">
-	// Handles form-submit by preparing to process response
+
+    var asyncStatus = false;
+
+    var params = {
+        socketAddress: 'ws://172.16.110.20:8003/ws',
+        deviceId: 'hmi-server',
+        serverName: 'fanitoring-service',
+        appId: 'hmi-app',
+        peerId: 2,
+        reconnectOnClose: false,
+        connectionCheckTimeout: 10000,
+        serverRegisteration: false,
+        asyncLogging: {
+            onFunction: true
+            // onMessageReceive: true,
+            // onMessageSend: true
+        }
+    };
+
+    /**
+     * Async Functions
+     */
+
+    function initAsync() {
+        /**
+         * Create a new Async Instance with given parameters
+         */
+        asyncClient = new PodAsync(params);
+
+        /**
+         * Whenever your Async connection gets asyncReady
+         * you would be abale to send messages through
+         */
+        asyncClient.on('asyncReady', function() {
+            console.log("Async Ready!");
+            getMapsList();
+        });
+
+        /**
+         * Listening to messages come from async gate
+         * @param   {string}    msg     Received Message From Async
+         * @param   {function}  ack     Callback function responsible of returning acknowledgements
+         */
+        asyncClient.on('message', function(msg, ack) {
+             console.log(content);
+        });
+
+        /**
+         * To show Async Status, we need to get state changes of
+         * async connection and display the state on the page
+         */
+        asyncClient.on('stateChange', function(state) {
+//            switch (state.socketState) {
+//                case 0:
+//                    asyncStatus = false;
+//                    document.getElementById('toolbar-async').innerText = 'Async: Connecting';
+//                    document.getElementById('toolbar-async').style.background = 'orange';
+//                    document.getElementById('toolbar-async').style.color = 'white';
+//                    break;
+//
+//                case 1:
+//                    asyncStatus = true;
+//
+//                    /**
+//                     * Rerender Map only if async is connected
+//                     * Before setting new interval, we should
+//                     * clear previuos one to avoid conflicts
+//                     */
+//                    pitchInterval && clearInterval(pitchInterval);
+//
+//                    pitchInterval = setInterval(function() {
+//                        renderLiveDataOnMapWithPitch(asyncData);
+//                    }, renderingPitch * 1000);
+//
+//                    document.getElementById('toolbar-async').innerText = 'Async: Connected';
+//                    document.getElementById('toolbar-async').style.background = 'green';
+//                    document.getElementById('toolbar-async').style.color = 'white';
+//                    break;
+//
+//                case 2:
+//                    asyncStatus = false;
+//                    pitchInterval && clearInterval(pitchInterval);
+//                    document.getElementById('toolbar-async').innerText = 'Async: Closing';
+//                    document.getElementById('toolbar-async').style.background = 'orange';
+//                    document.getElementById('toolbar-async').style.color = 'white';
+//                    break;
+//
+//                case 3:
+//                    asyncStatus = false;
+//                    pitchInterval && clearInterval(pitchInterval);
+//                    document.getElementById('toolbar-async').innerText = 'Async: Not Connected';
+//                    document.getElementById('toolbar-async').style.background = 'red';
+//                    document.getElementById('toolbar-async').style.color = 'white';
+//                    break;
+//            }
+        });
+    }
+
+    function getMapsList() {
+        // Get Maps List
+        var data = {
+            type: 5,
+            content: ''
+        };
+
+        // Save Map
+        // var data = {
+        //     type: 3,
+        //     content: {
+        //         name: new Date().getTime(),
+        //         content: new Date()
+        //     }
+        // };
+
+        var asyncMessage = {
+            type: 3,
+            content: {
+                 peerName: 'fanitoring-service',
+//                peerName: "hmi",
+                // peerName: "fanitoringservice",
+                // receivers: [2, 165592],
+                content: JSON.stringify(data)
+            }
+        };
+
+        asyncClient.send(asyncMessage);
+    }
+
+    // Handles form-submit by preparing to process response
 	function handleSubmit()
 	{
 		var form = window.openForm || document.getElementById('openForm');
@@ -47,6 +176,8 @@
 
 	function main()
 	{
+	    initAsync();
+
 		if (window.parent.Editor.useLocalStorage)
 		{
 			document.body.innerHTML = '';

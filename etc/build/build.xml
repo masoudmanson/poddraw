@@ -47,20 +47,19 @@
             window.mxLoadStylesheets = window.mxLoadStylesheets || false;
         </echo>
 
-        <delete file="${basedir}/.mim.js"/>
-        <copy file="${war.dir}/styles/default.xml" tofile="${basedir}/.mim.xml" overwrite="true"/>
-        <replaceregexp file="${basedir}/.mim.xml" match="${line.separator}" flags="g" replace=""/>
-        <replaceregexp file="${basedir}/.mim.xml" match="\t" flags="g" replace=""/>
-        <replaceregexp file="${basedir}/.mim.xml" match="'" flags="g" replace="\\\\'" byline="true"/>
+        <delete file="${basedir}/.tmp1.js"/>
+        <copy file="${war.dir}/styles/default.xml" tofile="${basedir}/.tmp1.xml" overwrite="true"/>
+        <replaceregexp file="${basedir}/.tmp1.xml" match="${line.separator}" flags="g" replace=""/>
+        <replaceregexp file="${basedir}/.tmp1.xml" match="\t" flags="g" replace=""/>
+        <replaceregexp file="${basedir}/.tmp1.xml" match="'" flags="g" replace="\\\\'" byline="true"/>
 
         <delete file="${basedir}/Graph-Stylesheet.js"/>
         <echo file="${basedir}/Graph-Stylesheet.js">Graph.prototype.defaultThemes[Graph.prototype.defaultThemeName] = mxUtils.parseXml(`</echo>
         <concat destfile="${basedir}/Graph-Stylesheet.js" fixlastline="no" append="true">
-            <filelist dir="${basedir}" files=".mim.xml"/>
+            <filelist dir="${basedir}" files=".tmp1.xml"/>
         </concat>
         <echo file="${basedir}/Graph-Stylesheet.js" append="true">`).documentElement;</echo>
 
-        <delete file="${basedir}/.mim.js"/>
         <delete file="${basedir}/.tmp1.js"/>
         <copy file="${war.dir}/styles/dark-default.xml" tofile="${basedir}/.tmp1.xml" overwrite="true"/>
         <replaceregexp file="${basedir}/.tmp1.xml" match="${line.separator}" flags="g" replace=""/>
