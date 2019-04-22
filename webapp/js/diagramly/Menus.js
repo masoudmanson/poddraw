@@ -1996,45 +1996,6 @@
                 }, parent, null, false);
             }
 
-            /**
-             * #poddraw Read from database
-             */
-            // menu.addItem(mxResources.get('fromDatabase') + '...', null,
-            //     function() {
-            //     var mapsList = [
-            //         {
-            //             name: 'Fanitoring-light',
-            //             content: `
-            //                 <mxGraphModel dx="1426" dy="810" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1366" pageHeight="768" background="#ffffff" math="0" shadow="0">
-            //                   <root>
-            //                     <mxCell id="sylnLES_YHyBSlh5gQFK-0"/>
-            //                     <mxCell id="sylnLES_YHyBSlh5gQFK-1" parent="sylnLES_YHyBSlh5gQFK-0"/>
-            //                     <mxCell id="sylnLES_YHyBSlh5gQFK-2" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;" parent="sylnLES_YHyBSlh5gQFK-1" vertex="1">
-            //                       <mxGeometry x="630" y="324" width="120" height="60" as="geometry"/>
-            //                     </mxCell>
-            //                   </root>
-            //                 </mxGraphModel>
-            //                 `},
-            //         {
-            //             name: 'Fanitoring-dark',
-            //             content: `
-            //                     <mxGraphModel dx="1426" dy="810" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1366" pageHeight="768" background="#ffffff" math="0" shadow="0">
-            //                       <root>
-            //                         <mxCell id="sylnLES_YHyBSlh5gQFK-0"/>
-            //                         <mxCell id="sylnLES_YHyBSlh5gQFK-1" parent="sylnLES_YHyBSlh5gQFK-0"/>
-            //                         <mxCell id="sylnLES_YHyBSlh5gQFK-2" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#76608a;strokeColor=#76608a;fontColor=#ffffff;" parent="sylnLES_YHyBSlh5gQFK-1" vertex="1">
-            //                           <mxGeometry x="630" y="324" width="120" height="60" as="geometry"/>
-            //                         </mxCell>
-            //                       </root>
-            //                     </mxGraphModel>
-            //                 `}
-            //     ];
-            //         var dlg = new MapsListFromDatabaseDialog(editorUi, mapsList);
-            //         editorUi.showDialog(dlg.container, 600, 320, true, true);
-            //         dlg.init();
-            //     }, parent);
-
-
             menu.addItem(mxResources.get('fromDatabase') + '...', null,
                 function() {
                     editorUi.pickFile(App.MODE_DATABASE);
@@ -2390,7 +2351,7 @@
                         }
                     }
 
-                    this.addMenuItems(menu, ['-', 'save', 'saveAs'], parent);
+                    this.addMenuItems(menu, ['-', 'save', 'saveAs', 'saveOnDatabase'], parent);
 
                     this.addMenuItems(menu, ['-', 'rename'], parent);
 

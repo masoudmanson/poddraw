@@ -13,6 +13,7 @@ mxscript(drawDevUrl + 'js/deflate/pako.min.js');
 mxscript(drawDevUrl + 'js/deflate/base64.js');
 mxscript(drawDevUrl + 'js/jscolor/jscolor.js');
 mxscript(drawDevUrl + 'js/sanitizer/sanitizer.min.js');
+mxscript(drawDevUrl + 'config.js');
 
 // Uses grapheditor from devhost
 mxscript(geBasePath +'/Editor.js');
@@ -108,6 +109,9 @@ mxscript(drawDevUrl + 'js/diagramly/OneDriveClient.js');
 mxscript(drawDevUrl + 'js/diagramly/TrelloFile.js');
 mxscript(drawDevUrl + 'js/diagramly/TrelloLibrary.js');
 mxscript(drawDevUrl + 'js/diagramly/TrelloClient.js');
+mxscript(drawDevUrl + 'js/diagramly/DatabaseFile.js');
+mxscript(drawDevUrl + 'js/diagramly/DatabaseLibrary.js');
+mxscript(drawDevUrl + 'js/diagramly/DatabaseClient.js');
 mxscript(drawDevUrl + 'js/diagramly/ChatWindow.js');
 
 mxscript(drawDevUrl + 'js/diagramly/App.js');

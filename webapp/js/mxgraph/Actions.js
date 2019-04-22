@@ -23,6 +23,9 @@ Actions.prototype.init = function()
 	{
 		return Action.prototype.isEnabled.apply(this, arguments) && graph.isEnabled();
 	};
+	var isFileAvailableOnDatabase = function() {
+		return (ui.getCurrentFile().fileId > 0) ? true : false;
+	};
 
 	// File actions
 	this.addAction('new...', function() { graph.openLink(ui.getUrl()); });
@@ -64,7 +67,8 @@ Actions.prototype.init = function()
 		});
 	}).isEnabled = isGraphEnabled;
 	this.addAction('save', function() { ui.saveFile(false); }, null, null, Editor.ctrlKey + '+S').isEnabled = isGraphEnabled;
-	this.addAction('saveAs...', function() { ui.saveFile(true); }, null, null, Editor.ctrlKey + '+Shift+S').isEnabled = isGraphEnabled;
+    this.addAction('saveAs...', function() { ui.saveFile(true); }, null, null, Editor.ctrlKey + '+Shift+S').isEnabled = isGraphEnabled;
+    this.addAction('saveOnDatabase', function() { ui.saveOnDatabase(false); }, null, null, null).isEnabled = isFileAvailableOnDatabase;
 	this.addAction('export...', function() { ui.showDialog(new ExportDialog(ui).container, 300, 230, true, true); });
 	this.addAction('editDiagram...', function()
 	{

@@ -10,11 +10,12 @@
  * @param {number} x X-coordinate of the point.
  * @param {number} y Y-coordinate of the point.
  */
-StorageFile = function(ui, data, title)
+StorageFile = function(ui, data, title, fileId)
 {
 	DrawioFile.call(this, ui, data);
 	
 	this.title = title;
+	this.fileId = fileId;
 };
 
 //Extends mxEventSource
@@ -68,7 +69,12 @@ StorageFile.prototype.getHash = function()
  */
 StorageFile.prototype.getTitle = function()
 {
-	return this.title;
+    return this.title;
+};
+
+StorageFile.prototype.getFileId = function()
+{
+    return this.fileId;
 };
 
 /**
@@ -131,16 +137,16 @@ StorageFile.prototype.saveFile = function(title, revision, success, error)
 			
 			try
 			{
-				this.ui.setLocalData(this.title, this.getData(), mxUtils.bind(this, function()
-				{
-					this.setModified(false);
-					this.contentChanged();
-					
-					if (success != null)
-					{
-						success();
-					}
-		        }));
+                this.ui.setLocalData(this.title, JSON.stringify({data: this.getData(), id: this.getFileId()}), mxUtils.bind(this, function()
+                {
+                    this.setModified(false);
+                    this.contentChanged();
+
+                    if (success != null)
+                    {
+                        success();
+                    }
+                }));
 			}
 			catch (e)
 			{

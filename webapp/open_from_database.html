@@ -2,33 +2,15 @@
 <html>
 <head>
     <title>Open Diagram</title>
-    <link rel="stylesheet" type="text/css" href="styles/grapheditor.css" />
+    <link rel="stylesheet" type="text/css" href="styles/grapheditor.css"/>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <script type="text/javascript" src="js/podasync.min.js"></script>
+    <script type="text/javascript" src="config.js"></script>
 </head>
 <script type="text/javascript">
+    var eventCallbacks = {};
 
-    var asyncStatus = false;
-
-    var params = {
-        socketAddress: 'ws://172.16.110.20:8003/ws',
-        deviceId: 'hmi-server',
-        serverName: 'fanitoring-service',
-        appId: 'hmi-app',
-        peerId: 2,
-        reconnectOnClose: false,
-        connectionCheckTimeout: 10000,
-        serverRegisteration: false,
-        asyncLogging: {
-            onFunction: true
-            // onMessageReceive: true,
-            // onMessageSend: true
-        }
-    };
-
-    /**
-     * Async Functions
-     */
+    var params = POD_CONFIG.SOCKET_PARAMS;
 
     function initAsync() {
         /**
@@ -41,8 +23,7 @@
          * you would be abale to send messages through
          */
         asyncClient.on('asyncReady', function() {
-            console.log("Async Ready!");
-            getMapsList();
+            document.querySelector('#content').innerHTML = '<h3 style="color: green">Async Connected</h3><br/>Fetching data from database ...';
         });
 
         /**
@@ -50,8 +31,12 @@
          * @param   {string}    msg     Received Message From Async
          * @param   {function}  ack     Callback function responsible of returning acknowledgements
          */
-        asyncClient.on('message', function(msg, ack) {
-             console.log(content);
+        asyncClient.on('message', function(msg) {
+            asyncMessageHandler(msg);
+        });
+
+        asyncClient.on('error', function(err) {
+            document.querySelector('#content').innerHTML = "<h3 style='color:red'>Something went wrong.</h3>Error Code: " + err.errorCode + "<br/>Error Message: " + err.errorMessage;
         });
 
         /**
@@ -59,273 +44,132 @@
          * async connection and display the state on the page
          */
         asyncClient.on('stateChange', function(state) {
-//            switch (state.socketState) {
-//                case 0:
-//                    asyncStatus = false;
-//                    document.getElementById('toolbar-async').innerText = 'Async: Connecting';
-//                    document.getElementById('toolbar-async').style.background = 'orange';
-//                    document.getElementById('toolbar-async').style.color = 'white';
-//                    break;
-//
-//                case 1:
-//                    asyncStatus = true;
-//
-//                    /**
-//                     * Rerender Map only if async is connected
-//                     * Before setting new interval, we should
-//                     * clear previuos one to avoid conflicts
-//                     */
-//                    pitchInterval && clearInterval(pitchInterval);
-//
-//                    pitchInterval = setInterval(function() {
-//                        renderLiveDataOnMapWithPitch(asyncData);
-//                    }, renderingPitch * 1000);
-//
-//                    document.getElementById('toolbar-async').innerText = 'Async: Connected';
-//                    document.getElementById('toolbar-async').style.background = 'green';
-//                    document.getElementById('toolbar-async').style.color = 'white';
-//                    break;
-//
-//                case 2:
-//                    asyncStatus = false;
-//                    pitchInterval && clearInterval(pitchInterval);
-//                    document.getElementById('toolbar-async').innerText = 'Async: Closing';
-//                    document.getElementById('toolbar-async').style.background = 'orange';
-//                    document.getElementById('toolbar-async').style.color = 'white';
-//                    break;
-//
-//                case 3:
-//                    asyncStatus = false;
-//                    pitchInterval && clearInterval(pitchInterval);
-//                    document.getElementById('toolbar-async').innerText = 'Async: Not Connected';
-//                    document.getElementById('toolbar-async').style.background = 'red';
-//                    document.getElementById('toolbar-async').style.color = 'white';
-//                    break;
-//            }
         });
     }
 
-    function getMapsList() {
-        // Get Maps List
+    function getMapsList(callback) {
         var data = {
-            type: 5,
+            type: 6,
             content: ''
         };
 
-        // Save Map
-        // var data = {
-        //     type: 3,
-        //     content: {
-        //         name: new Date().getTime(),
-        //         content: new Date()
-        //     }
-        // };
+        sendAsyncMessage(data, callback);
+    }
+
+    function asyncMessageHandler(msg) {
+        var msgContent = JSON.parse(msg.content);
+        var uniqueId = msgContent.uniqueId;
+        if (eventCallbacks.hasOwnProperty(uniqueId)) {
+            eventCallbacks[uniqueId](msgContent);
+        }
+    }
+
+    function sendAsyncMessage(msg, callback) {
+        var uniqueId = asyncClient.generateUUID();
+
+        msg.uniqueId = uniqueId;
 
         var asyncMessage = {
             type: 3,
             content: {
-                 peerName: 'fanitoring-service',
-//                peerName: "hmi",
-                // peerName: "fanitoringservice",
-                // receivers: [2, 165592],
-                content: JSON.stringify(data)
+                peerName: 'fanitoring-service',
+                content: JSON.stringify(msg)
             }
         };
+
+        eventCallbacks[uniqueId] = callback;
 
         asyncClient.send(asyncMessage);
     }
 
-    // Handles form-submit by preparing to process response
-	function handleSubmit()
-	{
-		var form = window.openForm || document.getElementById('openForm');
-		
-		if (window.parent.openNew && window.parent.baseUrl != null)
-		{
-			window.parent.openFile.setConsumer(null);
-			window.parent.open(window.parent.baseUrl);
-		}
-		
-		// NOTE: File is loaded via JS injection into the iframe, which in turn sets the
-		// file contents in the parent window. The new window asks its opener if any file
-		// contents are available or waits for the contents to become available.
-		return true;
-	};
-	
-	// Hides this dialog
-	function hideWindow(cancel)
-	{
-		window.parent.openFile.cancel(cancel);
-	}
-	
-	function fileChanged()
-	{
-		var supportedText = document.getElementById('openSupported');
-		var form = window.openForm || document.getElementById('openForm');
-		var openButton = document.getElementById('openButton');
-		
-		if (form.upfile.value.length > 0)
-		{
-			openButton.removeAttribute('disabled');
-		}
-		else
-		{
-			openButton.setAttribute('disabled', 'disabled');
-		}		
-	}
+    function hideWindow(cancel) {
+        window.parent.openFile.cancel(cancel);
+    }
 
-	function main()
-	{
-	    initAsync();
+    function main() {
+        initAsync();
 
-		if (window.parent.Editor.useLocalStorage)
-		{
-			document.body.innerHTML = '';
-			var div = document.createElement('div');
-			div.style.fontFamily = 'Arial';
+        getMapsList(function(result) {
+            if (result.validationErrorCode == -1) {
+                try {
+                    var maps = JSON.parse(result.content);
+                }
+                catch (e) {
+                    console.log(e);
+                }
+            }
 
-			var keys = [];
-			
-			for (var i = 0; i < localStorage.length; i++)
-			{
-				var key = localStorage.key(i);
-				var value = localStorage.getItem(key);
-				
-				if (key.length > 0 && key.charAt(0) != '.' && value.length > 0 &&
-					(value.substring(0, 8) === '<mxfile ' || value.substring(0, 11) === '<mxlibrary>' ||
-					value.substring(0, 5) === '<?xml') || value.substring(0, 12) === '<!--[if IE]>')
-				{
-					keys.push(key);
-				}
-			}
-			
-			if (keys.length == 0)
-			{
-				window.parent.mxUtils.write(div, window.parent.mxResources.get('noFiles'));
-				window.parent.mxUtils.br(div);
-			}
-			else
-			{
-				// Sorts the array by filename (key)
-				keys.sort(function (a, b)
-				{
-				    return a.toLowerCase().localeCompare(b.toLowerCase());
-				});
-				
-				for (var i = 0; i < keys.length; i++)
-				{
-					var key = keys[i];
-					
-					// Ignores "dot" files and dropbox cookies
-					if (key.length > 0)
-					{
-						var link = document.createElement('a');
-						link.style.fontDecoration = 'none';
-						link.style.fontSize = '14pt';
-	
-						window.parent.mxUtils.write(link, key);
-						link.setAttribute('href', 'javascript:void(0);');
-						div.appendChild(link);
-						
-						var img = document.createElement('span');
-						img.className = 'geSprite geSprite-delete';
-						img.style.position = 'relative';
-						img.style.cursor = 'pointer';
-						img.style.display = 'inline-block';
-						img.style.cssFloat = 'right';
-						img.style.styleFloat = 'right';
-						img.style.paddingRight = '20px';
-						div.appendChild(img);
-						
-						window.parent.mxUtils.br(div);
-						
-						window.parent.mxEvent.addListener(img, 'click', (function(k)
-						{
-							return function()
-							{
-								if (window.parent.mxUtils.confirm(window.parent.mxResources.get('delete') + ' "' + k + '"?'))
-								{
-									localStorage.removeItem(k);
-									window.location.reload();
-								}
-							};
-						})(key));
-	
-						window.parent.mxEvent.addListener(link, 'click', (function(k)
-						{
-							return function()
-							{
-								if (window.parent.openNew && window.parent.baseUrl != null)
-								{
-									var of = window.parent.openFile;
-									var data = localStorage.getItem(k);
-									
-									window.parent.openWindow(window.parent.baseUrl + '#L' + encodeURIComponent(k), function()
-									{
-										of.cancel(false);
-									}, function()
-									{
-										of.setData(data, k);
-									});
-								}
-								else
-								{
-									window.parent.openFile.setData(localStorage.getItem(k), k);
-								}
-							};
-						})(key));
-					}
-				}
-			}
+            document.body.innerHTML = '';
+            var div = document.createElement('div');
+            div.style.fontFamily = 'Arial';
 
-			window.parent.mxUtils.br(div);
-			
-			var closeButton = window.parent.mxUtils.button(window.parent.mxResources.get('close'), function()
-			{
-				hideWindow(true);
-			});
-			closeButton.className = 'geBtn';
-			div.appendChild(closeButton);
-			
-			document.body.appendChild(div);
-		}
-		else
-		{
-			var editLink = document.getElementById('editLink');
-			var openButton = document.getElementById('openButton');
-			openButton.value = window.parent.mxResources.get(window.parent.openKey || 'open');
-			var closeButton = document.getElementById('closeButton');
-			closeButton.value = window.parent.mxResources.get('close');
-			var supportedText = document.getElementById('openSupported');
-			supportedText.innerHTML = window.parent.mxResources.get('openSupported');
-			var form = window.openForm || document.getElementById('openForm');
+            var keys = [];
 
-			form.setAttribute('action', window.parent.OPEN_URL);
-		}
-	};
+            for (var i = 0; i < maps.length; i++) {
+                var key = maps[i].name;
+                var value = maps[i].content;
+                var mapId = maps[i].id;
+
+                if (key.length > 0 && key.charAt(0) != '.' && value.length > 0 &&
+                    (value.substring(0, 8) === '<mxfile ' || value.substring(0, 11) === '<mxlibrary>' ||
+                    value.substring(0, 5) === '<?xml') || value.substring(0, 12) === '<!--[if IE]>') {
+                    keys.push({name: key, id: i});
+                }
+            }
+
+            if (keys.length == 0) {
+                window.parent.mxUtils.write(div, window.parent.mxResources.get('noFiles'));
+                window.parent.mxUtils.br(div);
+            }
+            else {
+                for (var i = 0; i < keys.length; i++) {
+                    var key = keys[i];
+
+                    // Ignores "dot" files and dropbox cookies
+                    if (key.name.length > 0) {
+                        var link = document.createElement('a');
+                        link.style.fontDecoration = 'none';
+                        link.style.fontSize = '14pt';
+
+                        window.parent.mxUtils.write(link, key.name);
+                        link.setAttribute('href', 'javascript:void(0);');
+                        div.appendChild(link);
+
+                        window.parent.mxUtils.br(div);
+
+                        window.parent.mxEvent.addListener(link, 'click', (function(k) {
+                            return function() {
+//                                if (window.parent.openNew && window.parent.baseUrl != null) {
+//                                    var data = maps[key.id].content;
+//                                    var of = window.parent.openFile;
+////                                    window.parent.openWindow(window.parent.baseUrl + '#R' + encodeURIComponent(data), function() {
+////                                        of.cancel(false);
+////                                    }, function() {
+//                                    console.log("data#@#@$#", data);
+//                                        of.setData(data, k.name);
+////                                    });
+//                                }
+//                                else {
+                                    window.parent.openFile.setData(maps[k.id].content, k.name, maps[k.id].id);
+//                                }
+                            };
+                        })(key));
+                    }
+                }
+            }
+
+            window.parent.mxUtils.br(div);
+
+            var closeButton = window.parent.mxUtils.button(window.parent.mxResources.get('close'), function() {
+                hideWindow(true);
+            });
+            closeButton.className = 'geBtn';
+            div.appendChild(closeButton);
+            document.body.appendChild(div);
+        });
+    };
 </script>
 <body onload="main();">
-<form method="POST" enctype="multipart/form-data" action="" name="openForm"
-	id="openForm" onsubmit="return handleSubmit();" accept-charset="UTF-8">
-<table style="width:100%;">
-<tr>
-<td style="height:40px;vertical-align:top;" colspan="2">
-<input type="file" name="upfile" onchange="fileChanged()">
-</td>
-</tr>
-<tr>
-<td colspan="2" height="120px" id="openSupported" style="font-family:arial;color:grey;font-size:9pt;vertical-align:top;text-align:left;">
-</td>
-</tr>
-<tr>
-<td>
-</td>
-<td style="vertical-align:middle;text-align:right;white-space:nowrap;">
-<input type="button" id="closeButton" class="geBtn" value="Cancel" onclick="hideWindow(true);">
-<input type="submit" id="openButton" class="geBtn gePrimaryBtn" value="Open" disabled="disabled">
-</td>
-</tr>
-</table>
-</form>
+    <div id="content">Loading ...</div>
 </body>
 </html>

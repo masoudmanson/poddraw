@@ -3,6 +3,10 @@ include "config.php";
 session_start();
 include "layouts/header.php";
 
+if(isset($_GET['token']) && strlen($_GET['token']) > 0) {
+    $_SESSION['access_token'] = $_GET['token'];
+}
+
 if (isset($_SESSION['access_token'])) {
     header("Location: {$config['home']}webapp/index.php?dev=1");
 } else {

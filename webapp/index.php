@@ -64,7 +64,7 @@ function checkToken($access_token)
                 }
             }
         } else {
-            return json_encode(["result" => true, "profileImage" => $response->result->profileImage]);
+            return json_encode(["result" => true, "profileImage" => isset($response->result->profileImage) > 0 ? $response->result->profileImage : 'images/avatar.svg']);
         }
     }
     curl_close($ch);

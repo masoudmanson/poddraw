@@ -3410,6 +3410,8 @@
 	 */
 	EditorUi.prototype.getCurrentFile = function()
 	{
+        // console.log("Going to get curr file");
+        // console.log(this);
 		return this.currentFile;
 	};
 
@@ -11019,10 +11021,15 @@
 			serviceCount++
 		}
 
-		if (!splash && (this.gitHub != null))
-		{
-			serviceCount++
-		}
+        if (!splash && (this.gitHub != null))
+        {
+            serviceCount++
+        }
+
+        if (!splash && typeof window.DatabaseClient === 'function')
+        {
+            serviceCount++
+        }
 
 		if (!splash && (this.trello != null || typeof window.TrelloClient === 'function'))
 		{
