@@ -1483,7 +1483,7 @@ var EditDataDialog = function(ui, cell) {
 
     var addComboBox = function(index, name, value) {
         oDataRequest({
-            url: oDataConfig.oDataService + oDataConfig.oDataCollections[name].service
+            url: oDataConfig[APPLICATION_OWNER].url + oDataConfig[APPLICATION_OWNER].collections[name].service
         }, function(result) {
             if (!result.hasError) {
                 names[index] = name;
@@ -1498,7 +1498,9 @@ var EditDataDialog = function(ui, cell) {
                 }
             }
             else {
-                addTextArea(index, name, value);
+                console.log(result);
+                mxUtils.alert(result.errorMessage);
+                // addTextArea(index, name, value);
             }
         });
     };
@@ -1591,7 +1593,7 @@ var EditDataDialog = function(ui, cell) {
 
                     if (mxUtils.indexOf(reservedNames, name) >= 0) {
                         oDataRequest({
-                            url: oDataConfig.oDataService + oDataConfig.oDataCollections[name].service
+                            url: oDataConfig[APPLICATION_OWNER].url + oDataConfig[APPLICATION_OWNER].collections[name].service
                         }, function(result) {
                             if (!result.hasError) {
                                 var text = form.addCombo(name + ':', false, 1);
@@ -1608,11 +1610,13 @@ var EditDataDialog = function(ui, cell) {
                                 }
                             }
                             else {
-                                var text = form.addTextarea(name + ':', '', 2);
-                                text.style.width = '100%';
-                                texts.push(text);
-                                addRemoveButton(text, name);
-                                text.focus();
+                                console.log(result);
+                                mxUtils.alert(result.errorMessage);
+                                // var text = form.addTextarea(name + ':', '', 2);
+                                // text.style.width = '100%';
+                                // texts.push(text);
+                                // addRemoveButton(text, name);
+                                // text.focus();
                             }
                         });
 

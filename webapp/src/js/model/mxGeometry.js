@@ -236,7 +236,7 @@ mxGeometry.prototype.setTerminalPoint = function(point, isSource)
  */
 mxGeometry.prototype.rotate = function(angle, cx)
 {
-	var rad = mxUtils.toRadians(angle);
+	var rad = ls.toRadians(angle);
 	var cos = Math.cos(rad);
 	var sin = Math.sin(rad);
 	
@@ -245,26 +245,32 @@ mxGeometry.prototype.rotate = function(angle, cx)
 	{
 		var ct = new mxPoint(this.getCenterX(), this.getCenterY());
 		var pt = mxUtils.getRotatedPoint(ct, cos, sin, cx);
-		
-		this.x = Math.round(pt.x - this.width / 2);
-		this.y = Math.round(pt.y - this.height / 2);
+
+        // this.x = Math.round(pt.x - this.width / 2);
+        // this.y = Math.round(pt.y - this.height / 2);
+        this.x = pt.x - this.width / 2;
+        this.y = pt.y - this.height / 2;
 	}
 
 	// Rotates the source point
 	if (this.sourcePoint != null)
 	{
 		var pt = mxUtils.getRotatedPoint(this.sourcePoint, cos, sin, cx);
-		this.sourcePoint.x = Math.round(pt.x);
-		this.sourcePoint.y = Math.round(pt.y);
+        // this.sourcePoint.x = Math.round(pt.x);
+        // this.sourcePoint.y = Math.round(pt.y);
+        this.sourcePoint.x = pt.x;
+        this.sourcePoint.y = pt.y;
 	}
 	
 	// Translates the target point
 	if (this.targetPoint != null)
 	{
 		var pt = mxUtils.getRotatedPoint(this.targetPoint, cos, sin, cx);
-		this.targetPoint.x = Math.round(pt.x);
-		this.targetPoint.y = Math.round(pt.y);	
-	}
+        // this.targetPoint.x = Math.round(pt.x);
+        // this.targetPoint.y = Math.round(pt.y);
+        this.targetPoint.x = pt.x;
+        this.targetPoint.y = Mpt.y;
+    }
 	
 	// Translate the control points
 	if (this.points != null)
@@ -274,8 +280,10 @@ mxGeometry.prototype.rotate = function(angle, cx)
 			if (this.points[i] != null)
 			{
 				var pt = mxUtils.getRotatedPoint(this.points[i], cos, sin, cx);
-				this.points[i].x = Math.round(pt.x);
-				this.points[i].y = Math.round(pt.y);
+                // this.points[i].x = Math.round(pt.x);
+                // this.points[i].y = Math.round(pt.y);
+                this.points[i].x = pt.x;
+                this.points[i].y = pt.y;
 			}
 		}
 	}

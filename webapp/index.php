@@ -97,7 +97,7 @@ if (isset($_SESSION['access_token'])) {
             <meta name="mobile-web-app-capable" content="yes">
             <meta name="theme-color" content="#d89000">
             <script type="text/javascript">
-                window.ACCESS_TOKEN = "<?php echo $_SESSION['access_token']; ?>";
+                window.ACCESS_TOKEN = '<?php echo $_SESSION['access_token']; ?>';
                 /**
                  * URL Parameters and protocol description are here:
                  *
@@ -118,9 +118,10 @@ if (isset($_SESSION['access_token'])) {
                  * --
                  * - networkshapes=1: For testing network shapes (temporary)
                  */
-                var urlParams = (function () {
+                var urlParams = (function() {
                     var result = new Object();
-                    var params = window.location.search.slice(1).split('&');
+                    var params = window.location.search.slice(1)
+                        .split('&');
 
                     for (var i = 0; i < params.length; i++) {
                         idx = params[i].indexOf('=');
@@ -149,7 +150,7 @@ if (isset($_SESSION['access_token'])) {
 
                 // Redirects page if required
                 if (urlParams['dev'] != '1') {
-                    (function () {
+                    (function() {
                         var proto = window.location.protocol;
 
                         // Electron protocol is file:
@@ -162,8 +163,8 @@ if (isset($_SESSION['access_token'])) {
                             }
 
                             var href = proto + '//' + host + window.location.href.substring(
-                                window.location.protocol.length +
-                                window.location.host.length + 2);
+                                    window.location.protocol.length +
+                                    window.location.host.length + 2);
 
                             // Redirects if href changes
                             if (href != window.location.href) {
@@ -176,7 +177,7 @@ if (isset($_SESSION['access_token'])) {
                 /**
                  * Adds meta tags with application name (depends on offline URL parameter)
                  */
-                (function () {
+                (function() {
                     function addMeta(name, content) {
                         try {
                             var s = document.createElement('meta');
@@ -212,6 +213,10 @@ if (isset($_SESSION['access_token'])) {
             <link rel="shortcut icon" href="favicon.ico">
 
             <script type="text/javascript" src="js/o.min.js"></script>
+            <script
+                src="https://code.jquery.com/jquery-3.4.1.min.js"
+                integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+                crossorigin="anonymous"></script>
             <script type="text/javascript" src="js/hmi.js"></script>
 
             <style type="text/css">
@@ -322,6 +327,7 @@ if (isset($_SESSION['access_token'])) {
                     Next
                     mxUtilsBinaryToArray = byteArray
                 End Function
+
             </script>
             <!--<![endif]-->
 
@@ -345,7 +351,7 @@ if (isset($_SESSION['access_token'])) {
                         }
 
                         if (onLoad != null) {
-                            s.onload = s.onreadystatechange = function () {
+                            s.onload = s.onreadystatechange = function() {
                                 if (!r && (!this.readyState || this.readyState == 'complete')) {
                                     r = true;
                                     onLoad();
@@ -419,7 +425,7 @@ if (isset($_SESSION['access_token'])) {
                 }
 
                 // Adds basic error handling
-                window.onerror = function () {
+                window.onerror = function() {
                     var status = document.getElementById('geStatus');
 
                     if (status != null) {
@@ -447,10 +453,8 @@ if (isset($_SESSION['access_token'])) {
             /**
              * Main
              */
-            App.main(function () {
-                document.getElementById("userProfileImage").src = "<?php echo $userProfileImage->profileImage ?>";
-
-                mxUtils.get();
+            App.main(function() {
+                document.getElementById('userProfileImage').src = '<?php echo $userProfileImage->profileImage; ?>';
             });
         </script>
         </body>
