@@ -795,7 +795,7 @@
 	 */
 	Editor.initMath = function(src, config)
 	{
-		src = (src != null) ? src : 'https://math.draw.io/current/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+		src = (src != null) ? src : 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_HTMLorMML';
 		Editor.mathJaxQueue = [];
 
 		Editor.doMathJaxRender = function(container)
@@ -3869,7 +3869,7 @@
 				}
 
 				doc.writeln('</script>');
-				doc.writeln('<script type="text/javascript" src="https://math.draw.io/current/MathJax.js"></script>');
+				doc.writeln('<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js"></script>');
 			}
 
 			pv.closeDocument();

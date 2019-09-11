@@ -149,18 +149,13 @@ if (isset($_SESSION['access_token'])) {
                 }
 
                 // Redirects page if required
-                if (urlParams['dev'] != '1') {
+                if ('1' != '1') {
                     (function() {
                         var proto = window.location.protocol;
 
                         // Electron protocol is file:
                         if (proto != 'file:') {
                             var host = window.location.host;
-
-                            // Redirects apex and rt to www
-                            if (host === 'draw.io' || host === 'rt.draw.io') {
-                                host = 'www.draw.io';
-                            }
 
                             var href = proto + '//' + host + window.location.href.substring(
                                     window.location.protocol.length +
@@ -393,7 +388,7 @@ if (isset($_SESSION['access_token'])) {
                 var t0 = new Date();
 
                 // Changes paths for local development environment
-                if (urlParams['dev'] == '1') {
+                if ('1' == '1') {
                     mxForceIncludes = true;
                     // mxDevUrl = 'mxgraph2';
 
@@ -416,7 +411,29 @@ if (isset($_SESSION['access_token'])) {
                     mxscript(drawDevUrl + 'js/diagramly/Devel.js');
                 }
                 else {
-                    mxscript('js/app.min.js');
+                    // TODO Masoud
+                    // mxscript('js/app.min.js');
+
+                    mxForceIncludes = true;
+                    // mxDevUrl = 'mxgraph2';
+
+                    // var geBasePath = mxDevUrl + '/javascript/examples/grapheditor/www/js';
+                    var geBasePath = 'js/mxgraph';
+
+                    // var mxBasePath = mxDevUrl + '/javascript/src';
+                    var mxBasePath = 'src';
+
+                    mxscript('js/diagramly/Init.js');
+                    mxscript(geBasePath + '/Init.js');
+
+                    // mxscript(mxDevUrl + '/javascript/src/js/mxClient.js');
+                    mxscript(mxBasePath + '/js/mxClient.js');
+
+                    drawDevUrl = '';
+                    // Adds all JS code that depends on mxClient. This indirection via Devel.js is
+                    // required in some browsers to make sure mxClient.js (and the files that it
+                    // loads asynchronously) are available when the code loaded in Devel.js runs.
+                    mxscript(drawDevUrl + 'js/diagramly/Devel.js');
                 }
 
                 // Electron
@@ -451,8 +468,15 @@ if (isset($_SESSION['access_token'])) {
 
         <script type="text/javascript">
             /**
-             * Main
+             * Load Custom Functions Written for Pod
              */
+            mxscript('pod/animation.js');
+            mxscript('pod/tagConnection.js');
+            mxscript('pod/button.js');
+            mxscript('pod/chart.js');
+
+            var POD_DRAW_URL = 'http://172.16.110.26/poddraw/webapp';
+
             App.main(function() {
                 document.getElementById('userProfileImage').src = '<?php echo $userProfileImage->profileImage; ?>';
             });

@@ -8,7 +8,7 @@ if(isset($_GET['token']) && strlen($_GET['token']) > 0) {
 }
 
 if (isset($_SESSION['access_token'])) {
-    header("Location: {$config['home']}webapp/index.php?dev=1");
+    header("Location: {$config['home']}webapp/index.php");
 } else {
     ?>
     <div id="body-overlay">

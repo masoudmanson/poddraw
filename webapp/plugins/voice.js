@@ -4,19 +4,19 @@
  */
 /**
  * Voice plugin for draw.io
- * 
+ *
  * Documentation:
- * 
+ *
  * https://desk.draw.io/support/solutions/articles/16000042372
- * 
+ *
  * TODO: Use grammer https://msdn.microsoft.com/en-us/library/ee800145.aspx
  */
 Draw.loadPlugin(function(ui) {
-	// Speech recognition never supported without synthesis 
+	// Speech recognition never supported without synthesis
 	if (!('speechSynthesis' in window))
 	{
 		ui.showError('Error', 'Speech output not supported in this browser.', 'OK');
-		
+
 		return;
 	}
 	else
@@ -24,7 +24,7 @@ Draw.loadPlugin(function(ui) {
 		// Triggers loading of voices
 		speechSynthesis.getVoices();
 	}
-	
+
 	// Do no use in chromeless mode
 	if (ui.editor.isChromelessView())
 	{
@@ -34,10 +34,10 @@ Draw.loadPlugin(function(ui) {
 	// Mic PNG image
 	var outputImage = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyRpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoTWFjaW50b3NoKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDpBNDU1RDkxODcxREIxMUU0OTU3Qjg3REYyOTYxQzc0QiIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDpBNDU1RDkxOTcxREIxMUU0OTU3Qjg3REYyOTYxQzc0QiI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkE0NTVEOTE2NzFEQjExRTQ5NTdCODdERjI5NjFDNzRCIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOkE0NTVEOTE3NzFEQjExRTQ5NTdCODdERjI5NjFDNzRCIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+QsVUnQAAAX5JREFUeNqck00oRFEUx+eNyYSFUj7KgpfPBUlJWZgFw3IWihpRFpZia4e1hZSlNDsLopSNfBTFQqSwkKmZ5SA2ylfq+Z3pXL15ehlu/fqf9849555777mW4ziBfEZ9rd2InEEsmU4dmP/WHxKEkT1oglaSZOR/0DvRssIVUOQKjEASsxoGoQDmjT/oDUaOdRUzbkASrsMdzMIwSe2cBASXIjtQpyvHYQvzGeLQDkOwDG8w8p2A4GJEJre5Vk5DFBbZ7yG6D+PYL3oW0WwCgh/Re4i4t8PEE2QOxqikDN2AbuwQKr4WU4E4S3wOfw1CWtktFEI5ZDTu5y34DMvPIQl24dTHL9f2CRfQAB/wAFXwlE3gOO990Im95GmcLmQGEpyHTB6AI2xJKL4r7xYmYdX1betpT0kzoT1yhdhyY71aeW4rcyNySJswTVWXWkklcq5N1AETsCAuqkn9+hZ09RXoh1e4hm2CR//7mJqlB8xjCgXyHzXaDzETLONLgAEAxwd5e6Mz+S4AAAAASUVORK5CYII=';
 	var micImage = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA5UlEQVR4Xr3SMYrCQBTGcSfIQiAgRIS9hOANBCurPUAuIAp7A7FVsFkIbLGYA9gKtoKNYG3jll5AFNKG518YMD6SISD4wY9J4MvkMYwRkZqOMSZkifGFe1b4pnvW3TqK8oMo14twxUgXPRSlDxU7TcUNPqATlG7wCi93cA2Iq2x7l7IJsgofB6UTiEjKklFqsabQSdFA5jqDAzrYQGeNNv5d9yDBEAME6NreFmP8Yuma4A8hFpiLSFNAYYYYn0jwCIUnxMcER4h1whS+7hseXKcu9ifGeQ+qeO8GjN7DPve+Q6+oewPhmE63Qfsb6AAAAABJRU5ErkJggg==';
-	
+
 	// True if we're on ChromOs
 	var chromeOs = /\bCrOS\b/.test(navigator.userAgent);
-	
+
 	// Maximum length of message to speak
 	var maxMessageLength = 1000;
 
@@ -53,29 +53,29 @@ Draw.loadPlugin(function(ui) {
 
 	// Specifies if speech output is enabled.
 	var speechInputEnabled = true;
-	
+
 	// Last message is never repeated
 	var lastMessage = null;
-	
+
 	// Timestamp of last message
 	var lastMessageTimestamp = null;
-	
+
 	// Sets global recognition language
 	var lang = 'en-US';
-	
+
 	// Caches action names
 	var actions = null;
 	var actionList = null;
-	
+
 	// Caches shape names
 	var shapeList = null;
-	
+
 	// Last inserted cell
 	var lastInserted = null;
-	
+
 	// Current voice
 	var currentVoice = 10;
-	
+
 	// Current recognition thread
 	var recognizing = null;
 
@@ -88,7 +88,7 @@ Draw.loadPlugin(function(ui) {
 	mxResources.parse('speechHint=Hint');
 	mxResources.parse('speechHelp=Help');
 	mxResources.parse('speechQuit=Quit');
-	
+
 	// Installs footer click handler
 	function getOrCreateVoiceButton(ui)
 	{
@@ -108,7 +108,7 @@ Draw.loadPlugin(function(ui) {
 			ui.voiceButton.style.height = '28px';
 			ui.voiceButton.style.lineHeight = '28px';
 			ui.voiceButton.style.color = '#235695';
-			
+
 			if (ui.buttonContainer.firstChild != null)
 			{
 				ui.buttonContainer.insertBefore(ui.voiceButton, ui.buttonContainer.firstChild);
@@ -118,18 +118,18 @@ Draw.loadPlugin(function(ui) {
 				ui.buttonContainer.appendChild(ui.voiceButton);
 			}
 		}
-		
+
 		return ui.voiceButton;
 	};
-	
+
 	var td = getOrCreateVoiceButton(ui);
-	
+
 	if (td != null)
 	{
 		mxEvent.addGestureListeners(td, function(evt)
 		{
 			ui.editor.graph.popupMenuHandler.hideMenu();
-			
+
 			if (ui.menubar == null && mxEvent.isPopupTrigger(evt))
 			{
 				ui.editor.graph.popupMenuHandler.hideMenu();
@@ -138,17 +138,17 @@ Draw.loadPlugin(function(ui) {
 				menu.smartSeparators = true;
 				menu.showDisabled = true;
 				menu.autoExpand = true;
-				
+
 				// Disables autoexpand and destroys menu when hidden
 				menu.hideMenu = mxUtils.bind(this, function()
 				{
 					mxPopupMenu.prototype.hideMenu.apply(menu, arguments);
 					menu.destroy();
 				});
-		
+
 				var offset = mxUtils.getOffset(td);
 				menu.popup(offset.x, offset.y + td.offsetHeight, null, evt);
-				
+
 				// Allows hiding by clicking on document
 				ui.setCurrentMenu(menu);
 				mxEvent.consume(evt);
@@ -161,23 +161,23 @@ Draw.loadPlugin(function(ui) {
 				{
 					speechSynthesis.cancel();
 				}
-				
+
 				App.listen(true);
 			}
 
 			mxEvent.consume(evt);
 		});
-		
+
 		mxEvent.disableContextMenu(td);
 	}
-	
+
 	function setPluginInstalled(value)
 	{
 		if (mxSettings != null)
 		{
 	    	var plugins = mxSettings.getPlugins();
 	    	var installed = mxUtils.indexOf(plugins, '/plugins/voice.js') >= 0;
-	    	
+
 	    	if (value != installed)
 	    	{
 		    	if (installed)
@@ -188,13 +188,13 @@ Draw.loadPlugin(function(ui) {
 		    	{
 		    		plugins.push('/plugins/voice.js');
 		    	}
-		    	
+
 				mxSettings.setPlugins(plugins);
 				mxSettings.save();
 	    	}
 		}
 	};
-	
+
 	// Shows initial status message if only output is enable
 	if (!('webkitSpeechRecognition' in window))
 	{
@@ -204,7 +204,7 @@ Draw.loadPlugin(function(ui) {
 			td.style.color = '#235695';
 		}
 	}
-	
+
 	function updateStatusMessage()
 	{
 		if ('webkitSpeechRecognition' in window)
@@ -226,38 +226,38 @@ Draw.loadPlugin(function(ui) {
 			}
 		}
 	};
-	
+
 	updateStatusMessage();
-	
+
     var action = ui.actions.addAction('speechOutput', function()
     {
     	speechOutputEnabled = !speechOutputEnabled;
     }, null, null, 'Ctrl/AltGr+Shift+Esc');
 	action.setToggleAction(true);
 	action.setSelectedCallback(function() { return speechOutputEnabled; });
-	
+
     var action = ui.actions.addAction('speechInstalled', function()
     {
     	setPluginInstalled();
     });
 	action.setToggleAction(true);
 	action.setSelectedCallback(function() { return mxUtils.indexOf(mxSettings.getPlugins(), '/plugins/voice.js') >= 0; });
-	
+
     ui.actions.addAction('speechListen', function()
     {
     	App.listen();
     }, null, null, 'Ctrl/AltGr+Esc');
-	
+
     ui.actions.addAction('speechListenContinuous', function()
     {
     	App.listen(true);
     }, null, null, Editor.ctrlKey + '+O');
-	
+
     ui.actions.addAction('speechHint', function()
     {
     	App.sayHint();
     }, null, null, 'Shift+Esc');
-	
+
     ui.actions.addAction('speechHelp', function()
     {
     	window.open('https://desk.draw.io/support/solutions/articles/16000042372');
@@ -267,17 +267,17 @@ Draw.loadPlugin(function(ui) {
 	if (mxSettings != null)
 	{
 	    var tmp = mxSettings.settings.voice;
-	    
+
 	    if (tmp != null)
 	    {
 	    	currentVoice = parseInt(tmp);
 	    }
 	}
-    
+
 	ui.menus.put('voiceType', new Menu(mxUtils.bind(this, function(menu, parent)
 	{
 		var voices = speechSynthesis.getVoices();
-		
+
 		if (voices.length == 0)
 		{
 			menu.addItem('Loading...', null, function() {}, parent, null, false);
@@ -292,21 +292,21 @@ Draw.loadPlugin(function(ui) {
 					{
 						currentVoice = index;
 						App.say('hello');
-					    
+
 						if (mxSettings != null)
 						{
 							mxSettings.settings.voice = currentVoice;
 							mxSettings.save();
 						}
 					}, parent);
-					
+
 					if (index == currentVoice)
 					{
 						menu.addCheckmark(item, Editor.checkmarkImage);
 					}
 				})(i);
 			}
-			
+
 			if (!mxClient.IS_QUIRKS)
 			{
 				parent.div.style.overflowX = 'hidden';
@@ -317,19 +317,19 @@ Draw.loadPlugin(function(ui) {
 			}
 		}
 	})));
-	
+
     ui.actions.addAction('speechQuit', function()
     {
     	// Hides UI
     	speechOutputEnabled = false;
     	td.style.display = 'none';
-    	
+
     	if (menu != null)
     	{
     		menu.style.display = 'none';
     	}
     });
-    
+
 	ui.menus.put('voice', new Menu(function(menu, parent)
 	{
     	ui.menus.addSubmenu('voiceType', menu, parent);
@@ -341,21 +341,21 @@ Draw.loadPlugin(function(ui) {
     if (ui.menubar != null)
     {
 		var menu = ui.menubar.addMenu('Voice', ui.menus.get('voice').funct);
-		
+
 		// Inserts voice menu before help menu
 		menu.parentNode.insertBefore(menu, menu.previousSibling.previousSibling.previousSibling);
     }
-		
+
 	function insertShape(shape, done)
 	{
 		var searchTerm = mxUtils.trim(shape);
-		
+
 		ui.sidebar.searchEntries(searchTerm, 1, 0, function(results, len, more)
 		{
 			if (results.length > 0)
 			{
 				var elt = results[0]();
-				
+
 				// Click is blocked, must use mousedown/-up sequence
 				// LATER: Use touchstart or pointerEvents depending on system
 				dispatchEvent(elt, mouseEvent('mousedown', 1, 50, 1, 50));
@@ -365,14 +365,14 @@ Draw.loadPlugin(function(ui) {
 			{
 				App.say('{1} not found', [searchTerm]);
 			}
-			
+
 			if (done != null)
 			{
 				done();
 			}
 		});
 	};
-	
+
 	// http://stackoverflow.com/questions/11919065/sort-an-array-by-the-levenshtein-distance-with-best-performance-in-javascript
 	//http://www.merriampark.com/ld.htm, http://www.mgilleland.com/ld/ldjavascript.htm, Damerau–Levenshtein distance (Wikipedia)
 	var levenshteinDist = function(s, t) {
@@ -425,7 +425,7 @@ Draw.loadPlugin(function(ui) {
 	    // Step 7
 	    return d[n][m];
 	}
-	
+
 	function naiveHammingDistance(str1, str2) {
 	    var dist = 0;
 
@@ -437,7 +437,7 @@ Draw.loadPlugin(function(ui) {
 	        if (str2[i] && str2[i] !== str1[i])
 	        {
 	            dist += Math.abs(str1.charCodeAt(i) - str2.charCodeAt(i)) + Math.abs(str2.indexOf( str1[i] )) * 2;
-	        } 
+	        }
 	        else if (!str2[i])
 	        {
 	            //  If there's no letter in the comparing string
@@ -447,25 +447,25 @@ Draw.loadPlugin(function(ui) {
 
 	    return dist;
 	};
-	
+
 	function getBestWord(str1, words, useLevenshteinDist)
 	{
 		if (words == null || words.length == 0)
 		{
 			return str1;
 		}
-		
+
 		useLevenshteinDist = (useLevenshteinDist != null) ? useLevenshteinDist : true;
-		
+
 	    var bestWord = words[0];
 	    var minDist = ((useLevenshteinDist) ? levenshteinDist(str1, bestWord) :
 	    		naiveHammingDistance(str1, bestWord));
-	    
+
 	    for (var i = 1; i < words.length; i++)
 	    {
 		    	var tmp = ((useLevenshteinDist) ? levenshteinDist(str1, words[i]) :
 		    		((str1 == words[i]) ? 0 : naiveHammingDistance(str1, words[i])));
-		    	
+
 		    	if (tmp < minDist || (tmp == minDist &&
 		    		str1.length > bestWord.length &&
 		    		bestWord.length < words[i].length))
@@ -473,16 +473,16 @@ Draw.loadPlugin(function(ui) {
 		    		bestWord = words[i];
 		    		minDist = tmp;
 		    	}
-		    	
+
 		    	if (bestWord == str1)
 		    	{
 		    		break;
 		    	}
 	    }
-	    
+
 	    return bestWord;
 	}
-	
+
 	function mouseEvent(type, sx, sy, cx, cy, shift)
 	{
 	  var evt;
@@ -491,9 +491,9 @@ Draw.loadPlugin(function(ui) {
 	    cancelable: (type != "mousemove"),
 	    view: window,
 	    detail: 0,
-	    screenX: sx, 
+	    screenX: sx,
 	    screenY: sy,
-	    clientX: cx, 
+	    clientX: cx,
 	    clientY: cy,
 	    ctrlKey: false,
 	    altKey: false,
@@ -502,11 +502,11 @@ Draw.loadPlugin(function(ui) {
 	    button: 0,
 	    relatedTarget: undefined
 	  };
-	  
+
 	  if (typeof( document.createEvent ) == "function")
 	  {
 	    evt = document.createEvent("MouseEvents");
-	    evt.initMouseEvent(type, 
+	    evt.initMouseEvent(type,
 	      e.bubbles, e.cancelable, e.view, e.detail,
 	      e.screenX, e.screenY, e.clientX, e.clientY,
 	      e.ctrlKey, e.altKey, e.shiftKey, e.metaKey,
@@ -519,13 +519,13 @@ Draw.loadPlugin(function(ui) {
 	    {
 	    	evt[prop] = e[prop];
 	    }
-	  
+
 	    evt.button = { 0:1, 1:4, 2:2 }[evt.button] || evt.button;
 	  }
-	  
+
 	  return evt;
 	};
-	
+
 	function dispatchEvent (el, evt)
 	{
 	  if (el.dispatchEvent)
@@ -536,10 +536,10 @@ Draw.loadPlugin(function(ui) {
 	  {
 	    el.fireEvent('on' + type, evt);
 	  }
-	  
+
 	  return evt;
 	};
-	
+
 	var keyHandlerEscape = ui.keyHandler.escape;
 	ui.keyHandler.escape = function(evt)
 	{
@@ -550,14 +550,14 @@ Draw.loadPlugin(function(ui) {
 			{
 				App.say('Speech output disabled');
 			}
-			
+
 			speechOutputEnabled = !speechOutputEnabled;
-			
+
 			if (speechOutputEnabled)
 			{
 				App.say('Speech output enabled');
 			}
-			
+
 			mxEvent.consume(evt);
 		}
 		else if (mxEvent.isShiftDown(evt))
@@ -573,7 +573,7 @@ Draw.loadPlugin(function(ui) {
 
 	ui.keyHandler.bindAction(32, true, 'speechListen'); // Ctrl+SPACE
 	ui.keyHandler.bindAction(79, true, 'speechListenContinuous'); // Ctrl+O
-	
+
 	/**
 	 * Plays a beep.
 	 */
@@ -583,15 +583,15 @@ Draw.loadPlugin(function(ui) {
 	App.beep = function(wav)
 	{
 		wav = (wav != null) ? wav : beep;
-		
+
     	wav.play();
 	};
-	
+
 	// Thread to reset the label
 	var resetStatus = null;
 
 	/**
-	 * 
+	 *
 	 * Static method for speech output.
 	 */
 	App.say = function(message, params)
@@ -601,64 +601,64 @@ Draw.loadPlugin(function(ui) {
 			var text = mxResources.replacePlaceholders(message, params || []);
 			lastMessageTimestamp = null;
 			lastMessage = text;
-			
+
 			if (text != null && text.length > 0)
 			{
 				if (td != null)
 				{
 					var tmp = text;
-					
+
 		    		// Capitalize string
 		    		if (tmp != null && tmp.length > 1)
 		    		{
 		    			tmp = tmp.charAt(0).toUpperCase() + tmp.slice(1);
 		    		}
-		    		
+
 					td.innerHTML = ((speechOutputEnabled) ? '<img style="margin-right:4px;" align="absmiddle" border="0" src="' +
 							outputImage + '"/>' : '') + ' ' + tmp;
 		    		td.style.color = '#235695';
-					
+
 					if (resetStatus != null)
 					{
 						window.clearTimeout(resetStatus);
 						resetStatus = null;
 					}
-	
+
 					resetStatus = window.setTimeout(function()
 					{
 						updateStatusMessage();
 					}, (recognizing != null) ? 1000 : 3000);
 				}
-				
+
 				// Workaround for talking too much
 				if (speechOutputEnabled && (!speechSynthesis.speaking || !speechSynthesis.pending))
 				{
 					if (text.length < maxMessageLength)
 					{
 						var msg = new SpeechSynthesisUtterance();
-	
+
 						// Picks random voice with same main locale
 						var voices = speechSynthesis.getVoices();
-	
+
 						// Say "again" for same last message except more than 10 secs ago or shorter than again
 						if (lastMessageTimestamp != null && text == lastMessage && text != null &&
 							text.length > 5 && lastMessage != 'again')
 						{
-							if (lastMessageTimestamp != null && 
+							if (lastMessageTimestamp != null &&
 								new Date().getTime() - lastMessageTimestamp.getTime() < 10000)
 							{
 								text = 'repeat';
 							}
 						}
-	
+
 						msg.voice = voices[currentVoice];
 						msg.voiceURI = 'native';
 						//msg.lang = lang;
 						msg.text = text;
-	
+
 						console.log('App.say speak:', msg.text);
 						speechSynthesis.speak(msg);
-						
+
 						lastMessageTimestamp = new Date();
 					}
 					else
@@ -689,23 +689,23 @@ Draw.loadPlugin(function(ui) {
 			{
 				var recognition = new webkitSpeechRecognition();
 				recognition.interimResults = true;
-				
+
 				// TODO: Should use grammar instead of trying more alternatives
 				recognition.maxAlternatives = 5;
-				
+
 				recognition.lang = lang;
-				
+
 				if (continuous != null)
 				{
 					recognition.continuous = continuous;
 				}
-				
+
 				recognition.onstart = function(event)
 				{
 					updateStatusMessage();
 					App.beep();
 				};
-		    		
+
 				recognition.onresult = function(event)
 				{
 				    for (var i = event.resultIndex; i < event.results.length; ++i)
@@ -716,11 +716,11 @@ Draw.loadPlugin(function(ui) {
 			    				'"/> ' + event.results[i][0].transcript;
 			    			td.style.color = (event.results[i].isFinal) ? '#235695' : 'darkGray';
 			    		}
-			    		
+
 				    	if (event.results[i].isFinal)
 				    	{
 				    		var ok = false;
-				    		
+
 				    		for (var j = 0; j < event.results[i].length; j++)
 				    		{
 				    			if (App.executeVoiceCommand(event.results[i][j].transcript, recognition))
@@ -729,7 +729,7 @@ Draw.loadPlugin(function(ui) {
 				    				break;
 				    			}
 				    		}
-				    		
+
 				    		if (!ok)
 				    		{
 								App.say('{1} not found', [event.results[i][0].transcript]);
@@ -751,7 +751,7 @@ Draw.loadPlugin(function(ui) {
 				    	}
 				    }
 				};
-	
+
 				recognition.onend = function(event)
 				{
 					// Overrides footer
@@ -759,7 +759,7 @@ Draw.loadPlugin(function(ui) {
 					updateStatusMessage();
 					App.beep(beep2);
 				};
-				
+
 				recognition.start();
 				recognizing = recognition;
 			}
@@ -767,12 +767,12 @@ Draw.loadPlugin(function(ui) {
 		else
 		{
 			speechOutputEnabled = !speechOutputEnabled;
-			lastMessageTimestamp = null;			
+			lastMessageTimestamp = null;
 			App.say(lastMessage || 'Ready');
 			lastMessageTimestamp = null;
 		}
 	};
-	
+
 	/**
 	 * Executes the given voice command.
 	 */
@@ -780,7 +780,7 @@ Draw.loadPlugin(function(ui) {
 	{
 	    console.log('App.execute:', mxUtils.trim(command));
 	    var tokens = mxUtils.trim(command).split(' ');
-	    
+
 	    if (tokens.length > 0 && graph.isEnabled())
 	    {
 		    // Ask for Mic permissions
@@ -789,7 +789,7 @@ Draw.loadPlugin(function(ui) {
 		    {
 				var tmp = token.toLowerCase().replace(/ /g, '');
 		    	var style = null;
-		    	
+
 		    	for (var i = 0; i < styles.length; i++)
 		    	{
 		    		if (styles[i].toLowerCase() == tmp)
@@ -798,17 +798,17 @@ Draw.loadPlugin(function(ui) {
 		    			break;
 		    		}
 		    	}
-		    	
+
 		    	return style;
 		    };
-		    
+
 		    // Main command
 		    tokens[0] = tokens[0].toLowerCase();
 
 		    // TODO: Use hamming distance for best match command but include all possible actions
 		    // which might be too slow
 		    // console.log('connect', naiveHammingDistance(tokens[0], 'connect'), naiveHammingDistance('disable', 'connect'), naiveHammingDistance('change', 'connect'));
-		    
+
 		    if (graph.isEditing())
 		    {
 		    	if (tokens.length == 1 && tokens[0] == 'apply')
@@ -827,30 +827,30 @@ Draw.loadPlugin(function(ui) {
 		    	{
 		    		document.execCommand('insertHTML', false, command);
 		    	}
-		    	
+
 		    	return true;
 		    }
 		    else if (tokens[0] == 'edit' && tokens[1] == 'text')
 		    {
 				var cells = graph.getSelectionCells();
-		    	
+
 		    	if (cells.length == 1)
 		    	{
 		    		graph.startEditingAtCell(cells[0]);
 		    	}
-		    	
+
 		    	return true;
 		    }
 		    else if (tokens[0] == 'hello' || tokens[0] == 'hi')
 			{
 				App.say('Hello! Try "Help", "Help Topic" or "Quick Start".');
-				
+
 		    	return true;
 			}
 			else if (tokens[0] == 'help')
 			{
 				var wnd = ui.openLink('https://desk.draw.io/support/solutions/articles/16000042372');
-				
+
 				if (wnd == null)
 				{
 					App.say('Popup blocked');
@@ -860,7 +860,7 @@ Draw.loadPlugin(function(ui) {
 					// Just used to check if popup windows are allowed
 					wnd.close();
 					var searchTerm = mxUtils.trim(command.substring(tokens[0].length));
-					
+
 					if (searchTerm !=  null && searchTerm.length > 0)
 					{
 						ui.openLink('https://desk.draw.io/support/search/solutions?term=' +
@@ -872,38 +872,38 @@ Draw.loadPlugin(function(ui) {
 				{
 					App.say('help');
 				}
-				
+
 		    	return true;
 			}
 			else if ((tokens[0] == 'info' && tokens.length == 1) || mxUtils.trim(command).toLowerCase() == 'what\'s this')
 			{
 				App.sayHint();
-				
+
 		    	return true;
 			}
 			else if (tokens[0] == 'install' && tokens.length == 1)
 			{
 				setPluginInstalled(true);
 				App.say('Installed');
-				
+
 		    	return true;
 			}
 			else if (tokens[0] == 'uninstall' && tokens.length == 1)
 			{
 				setPluginInstalled(false);
 				App.say('Uninstalled');
-				
+
 		    	return true;
 			}
 			else if (tokens[0] == 'quick' && tokens.length > 0 && tokens[1].toLowerCase() == 'start')
 			{
 				var wnd = window.open('https://youtu.be/8OaMWa4R1SE?t=1');
-				
+
 				if (wnd == null)
 				{
 					App.say('Popup blocked');
 				}
-				
+
 		    	return true;
 			}
 			else if (tokens[0] == 'search' && tokens.length > 1)
@@ -915,28 +915,28 @@ Draw.loadPlugin(function(ui) {
 				{
 					App.say('Popup blocked');
 				}
-				
+
 		    	return true;
 			}
 			else if (tokens[0] == 'shrink')
 			{
 	    		var cell = graph.getSelectionCell();
 	    		var geo = graph.getCellGeometry(cell);
-	    		
+
 		    	if (graph.getModel().isVertex(cell) && geo != null)
 		    	{
 		    		geo = geo.clone();
-		    		
+
 		    		if (tokens.length == 1 || tokens[1] == 'height')
 		    		{
 		    			geo.height = graph.snap(Math.round(geo.height * 0.5));
 		    		}
-		    		
+
 		    		if (tokens.length == 1 || tokens[1] != 'height')
 		    		{
 		    			geo.width = graph.snap(Math.round(geo.width * 0.5));
 		    		}
-		    		
+
 		    		if (geo.width > graph.tolerance && geo.height > graph.tolerance)
 		    		{
 		    			graph.getModel().setGeometry(cell, geo);
@@ -951,28 +951,28 @@ Draw.loadPlugin(function(ui) {
 		    	{
 		    		App.say('No cell to resize');
 		    	}
-		    	
+
 		    	return true;
 			}
 			else if (tokens[0] == 'double')
 			{
 	    		var cell = graph.getSelectionCell();
 	    		var geo = graph.getCellGeometry(cell);
-	    		
+
 		    	if (graph.getModel().isVertex(cell) && geo != null)
 		    	{
 		    		geo = geo.clone();
-		    		
+
 		    		if (tokens.length == 1 || tokens[1] == 'height')
 		    		{
 		    			geo.height *= 2;
 		    		}
-		    		
+
 		    		if (tokens.length == 1 || tokens[1] != 'height')
 		    		{
 		    			geo.width *= 2;
 		    		}
-		    		
+
 		    		if (geo.width > graph.tolerance && geo.height > graph.tolerance)
 		    		{
 		    			graph.getModel().setGeometry(cell, geo);
@@ -987,14 +987,14 @@ Draw.loadPlugin(function(ui) {
 		    	{
 		    		App.say('No cell to resize');
 		    	}
-		    	
+
 		    	return true;
 			}
 			else if (tokens[0] == 'width' || tokens[0] == 'with' || tokens[0] == 'height')
 		    {
 				// Try numeric stylename if last token is numeric
 				var lastToken = tokens[tokens.length - 1].toLowerCase();
-				
+
 				// Fixes some special cases for recoginition of short phrases
 				// like "stroke width 2" where it tries to be clever
 				if (lastToken == 'tool' || lastToken == 'tune' || lastToken == 'tomb' || lastToken == 'tube')
@@ -1014,7 +1014,7 @@ Draw.loadPlugin(function(ui) {
 					// Converts numeric words to numbers (system only seems to return written numbers for <= 4)
 					var numbers = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
 					var tmpIndex = mxUtils.indexOf(numbers, lastToken);
-					
+
 					if (tmpIndex >= 0)
 					{
 						lastToken = tmpIndex;
@@ -1022,16 +1022,16 @@ Draw.loadPlugin(function(ui) {
 				}
 
 				var lastValue = parseFloat(tokens[1].toLowerCase());
-				
+
 				if (tokens.length >= 2 && !isNaN(lastValue))
 				{
 		    		var cell = graph.getSelectionCell();
 		    		var geo = graph.getCellGeometry(cell);
-		    		
+
 			    	if (graph.getModel().isVertex(cell) && geo != null)
 			    	{
 			    		geo = geo.clone();
-			    		
+
 			    		if (tokens[0] == 'height')
 			    		{
 			    			geo.height = lastValue;
@@ -1040,7 +1040,7 @@ Draw.loadPlugin(function(ui) {
 			    		{
 			    			geo.width = lastValue;
 			    		}
-			    		
+
 			    		graph.getModel().setGeometry(cell, geo);
 			    		App.say('Resized');
 			    	}
@@ -1049,7 +1049,7 @@ Draw.loadPlugin(function(ui) {
 			    		App.say('No cell to resize');
 			    	}
 				}
-				
+
 		    	return true;
 		    }
 			else if (tokens[0] == 'insert' && tokens.length > 1)
@@ -1059,17 +1059,17 @@ Draw.loadPlugin(function(ui) {
 				{
 					tokens[1] = 'ellipse';
 				}
-				
+
 				var searchTerm = mxUtils.trim(tokens.slice(1, tokens.length).join(' '));
 				var current = graph.getSelectionCell();
-				
+
 				// Clears selection to disable built-in connecting
 				graph.clearSelection();
-				
+
 				insertShape(searchTerm, function()
 				{
 					var cell = graph.getSelectionCell();
-					
+
 					// Connects dangling edge of previously selected edge and moves cell
 					if (graph.model.isVertex(cell) && graph.model.isEdge(current) &&
 						(graph.model.getTerminal(current, true) == null ||
@@ -1077,7 +1077,7 @@ Draw.loadPlugin(function(ui) {
 					{
 						var edgeState = graph.view.getState(current);
 						var vertexState = graph.view.getState(cell);
-						
+
 						if (vertexState != null && edgeState != null && edgeState.absolutePoints != null &&
 							edgeState.absolutePoints.length > 1)
 						{
@@ -1091,7 +1091,7 @@ Draw.loadPlugin(function(ui) {
 								var s = graph.view.scale;
 								var dx = pt.x - loc.x;
 								var dy = pt.y - loc.y;
-								
+
 								// TODO: Should add insert to transaction but need absolute position
 								graph.model.beginUpdate();
 								try
@@ -1107,25 +1107,25 @@ Draw.loadPlugin(function(ui) {
 						}
 					}
 				});
-				
+
 		    	return true;
 			}
 			else if (tokens[0] == 'connect' || tokens[0] == 'kinect' || (tokens[0] == 'clone' && tokens.length > 1))
 		    {
 	    		var cell = graph.getSelectionCell();
-	    		
+
 		    	if (graph.getModel().isVertex(cell))
 		    	{
 			    	// Uses east direction if token not understood
 			    	var direction = mxConstants.DIRECTION_EAST;
-			    	
+
 			    	if (tokens.length > 1)
 			    	{
 			    		tokens[1] = tokens[1].toLowerCase();
-	
+
 			    		// Guessing direction based on minimum hamming distance for given set
 			    		var guess = getBestWord(tokens[1], ['up', 'left', 'down', 'right', 'north', 'south', 'east', 'west']);
-	
+
 				    	if (guess == 'up' || guess == mxConstants.DIRECTION_NORTH)
 				    	{
 				    		direction = mxConstants.DIRECTION_NORTH;
@@ -1139,32 +1139,32 @@ Draw.loadPlugin(function(ui) {
 				    		direction = mxConstants.DIRECTION_SOUTH;
 				    	}
 		    		}
-			    	
+
 			    	var length = graph.defaultEdgeLength;
 			    	var cloneSource = tokens[0] == 'clone';
 			    	var evt = mouseEvent('click', 1, 50, 1, 50, !cloneSource);
 			    	var cells = graph.connectVertex(cell, direction, length, evt);
 			    	graph.selectCellsForConnectVertex(cells, evt, ui.hoverIcons);
 		    	}
-		    	
+
 		    	return true;
 		    }
 			// Fixes drive and ride common mistakes for right
 		    else if (mxUtils.indexOf(['and', 'drive', 'ride', 'move', 'up', 'left', 'down', 'right', 'north', 'south', 'east', 'west', 'downright'], tokens[0]) >= 0)
 		    {
 	    		var cell = graph.getSelectionCell();
-	    		
+
 		    	if (!graph.isSelectionEmpty())
 		    	{
 			    	// Uses east direction if token not understood
 			    	var dx = 0;
 			    	var dy = 0;
-			    	
+
 			    	for (var i = 0; i < tokens.length; i++)
 			    	{
 			    		tokens[i] = tokens[i].toLowerCase();
 				    	var direction = null;
-				    	
+
 				    	// Downright is a single word needs special handling
 				    	if (tokens[i].toLowerCase() == 'downright')
 				    	{
@@ -1174,7 +1174,7 @@ Draw.loadPlugin(function(ui) {
 				    	else
 				    	{
 				    		var guess = null;
-				    		
+
 				    		// Guessing direction based on minimum hamming distance for given set
 				    		// Handle some common cases
 				    		if (tokens[i] == 'drive' || tokens[i] == 'ride')
@@ -1185,7 +1185,7 @@ Draw.loadPlugin(function(ui) {
 				    		{
 					    		guess = getBestWord(tokens[i], ['move', 'and', 'up', 'left', 'right', 'north', 'south', 'east', 'west', 'down', 'downright']);
 				    		}
-		
+
 				    		if (guess == 'up' || guess == mxConstants.DIRECTION_NORTH)
 					    	{
 					    		direction = mxConstants.DIRECTION_NORTH;
@@ -1202,7 +1202,7 @@ Draw.loadPlugin(function(ui) {
 					    	{
 					    		direction = mxConstants.DIRECTION_EAST;
 					    	}
-					    	
+
 					    	if (direction != null)
 					    	{
 						    	if (direction == mxConstants.DIRECTION_NORTH)
@@ -1224,25 +1224,25 @@ Draw.loadPlugin(function(ui) {
 					    	}
 				    	}
 			    	}
-			    	
+
 			    	if (dx != 0 || dy != null)
 			    	{
 			    		graph.moveCells(graph.getSelectionCells(), dx, dy);
 			    		App.say('Moved');
 			    	}
-			    	
+
 			    	return true;
 		    	}
 		    }
 		    else if (tokens[0] == 'text')
 		    {
 				var cells = graph.getSelectionCells();
-		    	
+
 		    	if (cells.length == 0 && graph.model.contains(lastInserted))
 		    	{
 		    		cells = [lastInserted];
 		    	}
-	
+
 		    	if (cells.length == 0)
 		    	{
 					App.say('No cell for text');
@@ -1250,7 +1250,7 @@ Draw.loadPlugin(function(ui) {
 		    	else if (tokens[0].length >= 2)
 				{
 		    		var value = tokens.slice(1, tokens.length).join(' ');
-		    		
+
 		    		if (value.length > 0)
 		    		{
 			    		// Capitalize string
@@ -1262,13 +1262,13 @@ Draw.loadPlugin(function(ui) {
 		    			graph.labelChanged(cells[0], value);
 		    		}
 				}
-		    	
+
 		    	return true;
 		    }
 		    else if (tokens[0] == 'disconnect' && tokens.length == 1)
 		    {
 				var cells = graph.getAllEdges(graph.getSelectionCells());
-		    	
+
 		    	if (cells.length == 0)
 		    	{
 					App.say('No cell to disconnect');
@@ -1277,13 +1277,13 @@ Draw.loadPlugin(function(ui) {
 		    	{
 		    		graph.removeCells(cells);
 		    	}
-		    	
+
 		    	return true;
 		    }
 		    else if (tokens[0] == 'deselect' && tokens.length == 1)
 		    {
 		    	graph.clearSelection();
-		    	
+
 		    	return true;
 		    }
 		    else if (tokens[0] === 'select' && (tokens.length == 1 || mxUtils.indexOf(
@@ -1303,7 +1303,7 @@ Draw.loadPlugin(function(ui) {
 		    	else if (mxUtils.indexOf(['connection', 'connections', 'inches'], tokens[1].toLowerCase()) >= 0)
 		    	{
 					var edges = graph.getAllEdges(graph.getSelectionCells());
-		
+
 			    	if (edges.length > 0)
 			    	{
 			    		graph.setSelectionCells(edges);
@@ -1312,7 +1312,7 @@ Draw.loadPlugin(function(ui) {
 			    	{
 			    		ui.actions.get('selectEdges').funct();
 			    	}
-			    	
+
 		    		App.sayHint();
 			    	return true;
 		    	}
@@ -1330,16 +1330,16 @@ Draw.loadPlugin(function(ui) {
 		    			// Selects the first vertex
 		    			var parent = graph.getDefaultParent();
 		    			var childCount = graph.model.getChildCount(parent);
-		    			
+
 		    			for (var i = childCount - 1; i >= 0; i--)
 		    			{
 		    				var child = graph.model.getChildAt(parent, i);
-		    				
+
 		    				if (graph.model.isVertex(child))
 		    				{
 		    					graph.setSelectionCell(child);
 		    					App.say('{1} selected', [graph.getWordForCell(child).replace(/([A-Z])/g, ' $1')]);
-		    					
+
 		    					return true;
 		    				}
 		    			}
@@ -1350,31 +1350,31 @@ Draw.loadPlugin(function(ui) {
 			    		var model = graph.getModel();
 			    		var index = model.getParent(cell).getIndex(cell);
 			    		var childCount = model.getChildCount(model.getParent(cell));
-			    		
+
 			    		if (index >= 0)
 			    		{
 			    			var next = model.getParent(cell).getChildAt(((index == 0) ? childCount : index) - 1);
-			    			
+
 			    			if (next != null)
 			    			{
 			    				graph.setSelectionCell(next);
 			    				App.say('{1} selected', [graph.getWordForCell(next)]);
-			    				
+
 			    				return true;
 			    			}
 			    		}
-		
+
 			    		App.say('Previous not found');
 		    		}
 		    	}
 		    	else if (mxUtils.indexOf(['source', 'target'], tokens[1].toLowerCase()) >= 0)
 		    	{
 		    		var cell = graph.getSelectionCell();
-		    		
+
 		    		if (graph.model.isEdge(cell))
 		    		{
 		    			var terminal = graph.model.getTerminal(cell, tokens[1].toLowerCase() == 'source');
-		    			
+
 		    			if (terminal != null)
 		    			{
 		    				graph.setSelectionCell(terminal);
@@ -1389,16 +1389,16 @@ Draw.loadPlugin(function(ui) {
 		    			// Selects the first vertex
 		    			var parent = graph.getDefaultParent();
 		    			var childCount = graph.model.getChildCount(parent);
-		    			
+
 		    			for (var i = 0; i < childCount; i++)
 		    			{
 		    				var child = graph.model.getChildAt(parent, i);
-		    				
+
 		    				if (graph.model.isVertex(child))
 		    				{
 		    					graph.setSelectionCell(child);
 		    					App.say('{1} selected', [graph.getWordForCell(child).replace(/([A-Z])/g, ' $1')]);
-		    					
+
 		    					return true;
 		    				}
 		    			}
@@ -1409,16 +1409,16 @@ Draw.loadPlugin(function(ui) {
 			    		var model = graph.getModel();
 			    		var index = model.getParent(cell).getIndex(cell);
 			    		var childCount = model.getChildCount(model.getParent(cell));
-			    		
+
 			    		if (index < childCount)
 			    		{
 			    			var next = model.getParent(cell).getChildAt(((index == childCount - 1) ? 0 : index + 1));
-			    			
+
 			    			if (next != null)
 			    			{
 			    				graph.setSelectionCell(next);
 			    				App.say('{1} selected', [graph.getWordForCell(next).replace(/([A-Z])/g, ' $1')]);
-			    				
+
 			    				return true;
 			    			}
 			    		}
@@ -1437,28 +1437,28 @@ Draw.loadPlugin(function(ui) {
 				    	{
 				    		// Tries label search first
 				    		var lab = graph.getLabel(states[i].cell);
-				    		
+
 				    		if (lab != null && lab.length > 0)
 				    		{
 				    			lab = lab.toLowerCase().replace(/ /g, '');
-				    			
+
 						    	// Some common mistakes
 						    	if (lab.charAt(lab.length - 1) == '2' && tokens[tokens.length - 1].toLowerCase() == 'to')
 						    	{
 						    		lab = lab.substring(0, lab.length - 1) + 'to';
 						    	}
-				    			
+
 				    			var min = Math.min(searchToken.length, lab.length);
-				    			
+
 				    			if (searchToken.substring(0, min) == lab.substring(0, min))
 				    			{
 				    				graph.setSelectionCell(states[i].cell);
 					    			App.say('{1} selected', [graph.getWordForCell(states[i].cell)]);
-					    		
+
 					    			return true;
 				    			}
 				    		}
-				    		
+
 				    		// Then tries shapename search
 					    	if (tokens.length == 2)
 					    	{
@@ -1480,15 +1480,15 @@ Draw.loadPlugin(function(ui) {
 						    		searchToken = 'parallelogram';
 						    	}
 					    	}
-					    	
+
 				    		var wrd = graph.getWordForCell(states[i].cell, true);
 				    		var min = Math.min(wrd.length, searchToken.length);
-				    		
+
 				    		if (searchToken.substring(0, min) == wrd.substring(0, min))
 				    		{
 				    			graph.setSelectionCell(states[i].cell);
 				    			App.say('{1} selected', [graph.getWordForCell(states[i].cell)]);
-				    		
+
 				    			return true;
 				    		}
 				    	}
@@ -1498,12 +1498,12 @@ Draw.loadPlugin(function(ui) {
 		    else if (tokens[0] === 'remove')
 			{
 				var cells = graph.getSelectionCells();
-		    	
+
 		    	if (cells.length == 0 && graph.model.contains(lastInserted))
 		    	{
 		    		cells = [lastInserted];
 		    	}
-	
+
 		    	if (cells.length == 0)
 		    	{
 					App.say('No cells');
@@ -1516,10 +1516,10 @@ Draw.loadPlugin(function(ui) {
 			    {
 					// Remove style
 					var styleToken = mxUtils.trim(tokens.slice(1, tokens.length).join(' ').toLowerCase());
-					
+
 					// Fixes common recognition errors
 					styleToken = styleToken.replace(/a line/g, 'align')
-					
+
 					// Merges to single word
 					styleToken = styleToken.replace(/ /g, '')
 
@@ -1535,7 +1535,7 @@ Draw.loadPlugin(function(ui) {
 	    		            mxConstants.STYLE_ALIGN, mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.STYLE_FONTFAMILY,
 	    			        mxConstants.STYLE_LABEL_POSITION, mxConstants.STYLE_VERTICAL_LABEL_POSITION,
 	    			        mxConstants.STYLE_GRADIENT_DIRECTION];
-    			
+
 		    		// Guesses best word
 		    		var	style = getBestWord(styleToken, keys);
 
@@ -1549,21 +1549,21 @@ Draw.loadPlugin(function(ui) {
 			    		App.say('Unknown style {1}', [changeTokens[0]]);
 			    	}
 			    }
-		    	
+
 		    	return true;
 			}
 			else
 			{
 				var cells = graph.getSelectionCells();
-		    	
+
 		    	if (cells.length == 0 && graph.model.contains(lastInserted))
 		    	{
 		    		cells = [lastInserted];
 		    	}
-		    	
+
 				// Try numeric stylename if last token is numeric
 				var lastToken = tokens[tokens.length - 1].toLowerCase();
-				
+
 				// Fixes some special cases for recoginition of short phrases
 				// like "stroke width 2" where it tries to be clever
 				if (lastToken == 'tool' || lastToken == 'tune' || lastToken == 'tomb' || lastToken == 'tube')
@@ -1583,20 +1583,20 @@ Draw.loadPlugin(function(ui) {
 					// Converts numeric words to numbers (system only seems to return written numbers for <= 4)
 					var numbers = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
 					var tmpIndex = mxUtils.indexOf(numbers, lastToken);
-					
+
 					if (tmpIndex >= 0)
 					{
 						lastToken = tmpIndex;
 					}
 				}
-				
+
 				// If last token is numeric
 				var lastValue = parseFloat(lastToken);
-				
+
 				if (tokens.length >= 2 && !isNaN(lastValue))
 				{
 					var styleToken = tokens.slice(0, tokens.length - 1).join('').toLowerCase();
-					
+
 					// Numeric styles
 		    		var keys = [mxConstants.STYLE_STROKEWIDTH, mxConstants.STYLE_FONTSIZE, mxConstants.STYLE_SPACING,
 		    		            mxConstants.STYLE_SPACING_TOP, mxConstants.STYLE_SPACING_LEFT, mxConstants.STYLE_SPACING_RIGHT,
@@ -1604,7 +1604,7 @@ Draw.loadPlugin(function(ui) {
 		    		            mxConstants.STYLE_STARTSIZE, mxConstants.STYLE_ENDSIZE, mxConstants.STYLE_OPACITY,
 		    		            mxConstants.STYLE_TEXT_OPACITY, mxConstants.STYLE_ROTATION]
 					var style = null;
-					
+
 					// Workaround for problem with "font size" is to say "size" ("font" is near "phone")
 					if (styleToken == 'size')
 					{
@@ -1615,7 +1615,7 @@ Draw.loadPlugin(function(ui) {
 						// Guesses best word
 						style = getBestWord(styleToken, keys);
 					}
-					
+
 					if (style != null)
 			    	{
 						if (cells.length == 0)
@@ -1632,19 +1632,19 @@ Draw.loadPlugin(function(ui) {
 						{
 							App.say('{1} ignored', [lastValue]);
 						}
-						
+
 		    			// Terminate
 		    			return true;
 			    	}
 				}
-				
+
 				// If "color" appears in the command
 				if (tokens.length >= 2)
 				{
 					// Replaces GB spelling with US spelling for internal lookups
 					var colorCommand = mxUtils.trim(command.toLowerCase().replace(/colour/g, 'color'));
 					var colorIndex = colorCommand.indexOf('color');
-					
+
 					// "Color" (word alone) matches to fill color
 					if (colorIndex >= 0)
 					{
@@ -1652,7 +1652,7 @@ Draw.loadPlugin(function(ui) {
 						var colorToken = mxUtils.trim(colorCommand.substring(
 							colorCommand.indexOf(' ', colorIndex))).replace(/ /g, '');
 						var color = null;
-				    	
+
 						// Checks for color code of token using ntc
 				    	for (var i = 0; i < ntc.names.length; i++)
 				    	{
@@ -1662,18 +1662,18 @@ Draw.loadPlugin(function(ui) {
 				    			break;
 				    		}
 				    	}
-				    	
+
 				    	// Color is known
 				    	if (color != null)
 				    	{
 				    		var styleToken = colorCommand.substring(0, colorIndex + 'color'.length).replace(/ /g, '');
-				    		
+
 				    		keys = [mxConstants.STYLE_GRADIENTCOLOR,
 				    		        mxConstants.STYLE_STROKECOLOR, mxConstants.STYLE_FONTCOLOR,
 				    		        mxConstants.STYLE_LABEL_BACKGROUNDCOLOR, mxConstants.STYLE_LABEL_BORDERCOLOR,
 				    		        mxConstants.STYLE_FILLCOLOR];
 				    		var style = null;
-				    		
+
 				    		// Handles some special cases
 				    		if (styleToken == 'thecolor' || styleToken == 'color')
 				    		{
@@ -1691,7 +1691,7 @@ Draw.loadPlugin(function(ui) {
 				    			// Guesses best word
 				    			style = getBestWord(styleToken, keys);
 				    		}
-				    		
+
 				    		if (style != null)
 				    		{
 								if (cells.length == 0)
@@ -1703,14 +1703,14 @@ Draw.loadPlugin(function(ui) {
 									graph.setCellStyles(style, color, cells);
 					    			ui.fireEvent(new mxEventObject('styleChanged', 'keys', [style], 'values', [color], 'cells', cells));
 								}
-				    			
+
 				    			// Terminate
 				    			return true;
 				    		}
 				    	}
 					}
 				}
-				
+
 				// If the first token is a general stylename
 				if (tokens.length >= 2)
 				{
@@ -1718,18 +1718,18 @@ Draw.loadPlugin(function(ui) {
 					        mxConstants.STYLE_FONTFAMILY, mxConstants.STYLE_LABEL_POSITION,
 					        mxConstants.STYLE_VERTICAL_LABEL_POSITION,
 				            mxConstants.STYLE_GRADIENT_DIRECTION];
-					
+
 					var styleToken = mxUtils.trim(tokens.slice(0, tokens.length - 1).join(' ').toLowerCase());
-					
+
 					// Fixes common recognition errors
 					styleToken = styleToken.replace(/a line/g, 'align')
-					
+
 					// Merges to single word
 					styleToken = styleToken.replace(/ /g, '')
-					
+
 					var style = resolveStylename(styleToken, keys);
 					var value = mxUtils.trim(tokens[tokens.length - 1].toLowerCase());
-					
+
 					if (style != null && value != null && value.length > 0)
 					{
 						if (cells.length == 0)
@@ -1741,25 +1741,25 @@ Draw.loadPlugin(function(ui) {
 							graph.setCellStyles(style, value, cells);
 			    			ui.fireEvent(new mxEventObject('styleChanged', 'keys', [style], 'values', [value], 'cells', cells));
 						}
-		    			
+
 		    			// Terminate
 		    			return true;
 					}
 				}
-				
+
 				// Checks if the command is a shape name
 				var vertices = [];
-				
+
 				for (var i = 0; i < cells.length; i++)
 				{
 					var cell = cells[i];
-					
+
 					if (graph.model.isVertex(cell))
 					{
 						vertices.push(cell);
 					}
 				}
-				
+
 		    	var shapenameToken = mxUtils.trim(tokens.join('')).toLowerCase();
 
 		    	// Searches for registered shape names
@@ -1768,17 +1768,17 @@ Draw.loadPlugin(function(ui) {
 		    	if (shapeList == null)
 		    	{
 		    		shapeList = [];
-		    		
+
 		    		for (var tmp in mxCellRenderer.defaultShapes)
 		    		{
 		    			shapeList.push(tmp.toLowerCase());
 		    		}
 		    	}
-		    	
+
 		    	// Only exact matches allowed here
 		    	// LATER: Support rounded style
 		    	var shape = null;
-		    	
+
 		    	// Some common mappings
 		    	if (mxUtils.indexOf(['cirlce', 'event', 'start', 'end'], shapenameToken) >= 0)
 		    	{
@@ -1800,7 +1800,7 @@ Draw.loadPlugin(function(ui) {
 		    	{
 		    		shape = getBestWord(shapenameToken, shapeList);
 		    	}
-		    	
+
 		    	// LATER: Ignore all edge shapes
 	    		if (shape != null && shape.toLowerCase() == shapenameToken && shape != 'connector' &&
 	    			shape != 'arrow' && shape != 'flexarrow' && shape != 'arrowconnector' &&
@@ -1820,18 +1820,18 @@ Draw.loadPlugin(function(ui) {
 			    		graph.setCellStyles(mxConstants.STYLE_SHAPE, shapenameToken, vertices);
 			    		ui.fireEvent(new mxEventObject('styleChanged', 'keys', [mxConstants.STYLE_SHAPE],
 			    			'values', [shapenameToken], 'cells', vertices));
-			    		
+
 			    		// Terminate
 			    		return true;
 				}
 		    	}
-				
+
 				// Lazy creation of cache for action names
 				if (actions == null)
 				{
 					actions = {};
 					actionList = [];
-					
+
 					for (var name in ui.actions.actions)
 					{
 						var shortname = mxUtils.trim(name).toLowerCase().replace(/ /g, '');
@@ -1839,10 +1839,10 @@ Draw.loadPlugin(function(ui) {
 						actionList.push(shortname);
 					}
 				}
-				
+
 				var name = mxUtils.trim(command).toLowerCase().replace(/ /g, '');
-				
-				if (urlParams['dev'] == '1')
+
+				if ('1' == '1')
 				{
 					var guess = getBestWord(name, actionList, true);
 					console.log('App.say guess:', name, '=>', guess, '(' +
@@ -1850,7 +1850,7 @@ Draw.loadPlugin(function(ui) {
 						levenshteinDist(name, guess) +
 						')');
 				}
-				
+
 				// Some common redirects and mistakes
 				if (tokens[0] == 'back')
 				{
@@ -1874,7 +1874,7 @@ Draw.loadPlugin(function(ui) {
 				}
 
 				var action = actions[name];
-				
+
 				if (action != null)
 				{
 					if (action.isEnabled())
@@ -1887,10 +1887,10 @@ Draw.loadPlugin(function(ui) {
 						// Cannot use name here as it has no spaces
 						App.say('{1} disabled', [command]);
 					}
-					
+
 					return true;
 				}
-				
+
 				return false;
 			}
 	    }
@@ -1913,10 +1913,10 @@ Draw.loadPlugin(function(ui) {
 	    		});
 	        });
 		}
-		
+
 		// Installs helper methods and listeners for speech output
 		var graph = ui.editor.graph;
-		
+
 		App.reloadVoicePlugin = function()
 		{
 	    	// Shows UI
@@ -1924,7 +1924,7 @@ Draw.loadPlugin(function(ui) {
 	    	menu.style.display = '';
 	    	td.style.display = 'inline-block';
 		};
-		
+
 		App.sayHint = function()
 		{
 			if (graph.getSelectionCount() == 0)
@@ -1934,11 +1934,11 @@ Draw.loadPlugin(function(ui) {
 			else if (graph.getSelectionCount() == 1)
 			{
 				var cell = graph.getSelectionCell();
-				
+
 				if (graph.getModel().isVertex(cell))
 				{
 					var geo = graph.getCellGeometry(cell)
-			
+
 					if (geo != null)
 					{
 						App.say('{1} at {2} and {3} is {4} times {5} pixels', [graph.getWordForCell(cell, true),
@@ -1949,9 +1949,9 @@ Draw.loadPlugin(function(ui) {
 				{
 					App.say('One connection selected');
 				}
-				
+
 				var lab = mxUtils.trim(graph.getLabel(cell));
-				
+
 				if (lab != null && lab.length > 0 && lab.length < 20)
 				{
 					App.say('Label is {1}', [lab]);
@@ -1962,11 +1962,11 @@ Draw.loadPlugin(function(ui) {
 				var cells = graph.getSelectionCells();
 				var vertexCount = 0;
 				var edgeCount = 0;
-				
+
 				for (var i = 0; i < cells.length; i++)
 				{
 					var cell = cells[i];
-					
+
 					if (graph.model.isEdge(cell))
 					{
 						edgeCount++;
@@ -1980,7 +1980,7 @@ Draw.loadPlugin(function(ui) {
 				if (vertexCount > 0 && edgeCount > 0)
 				{
 					var tmp = '';
-					
+
 					if (vertexCount == 1)
 					{
 						tmp += 'One shape';
@@ -1989,9 +1989,9 @@ Draw.loadPlugin(function(ui) {
 					{
 						tmp += '{1} shapes';
 					}
-					
+
 					tmp += ' and ';
-					
+
 					if (edgeCount == 1)
 					{
 						tmp += 'one connection';
@@ -2000,7 +2000,7 @@ Draw.loadPlugin(function(ui) {
 					{
 						tmp += '{2} connections';
 					}
-					
+
 					App.say(tmp + ' selected', [vertexCount, edgeCount]);
 				}
 				else if (vertexCount > 0)
@@ -2013,7 +2013,7 @@ Draw.loadPlugin(function(ui) {
 				}
 			}
 		};
-		
+
 		// Can return more than first word
 		function firstWord(value)
 		{
@@ -2021,23 +2021,23 @@ Draw.loadPlugin(function(ui) {
 			if (value != null && value.length > maxLabelLength)
 			{
 				var space = value.indexOf(' ');
-				
+
 				// Add second word if label is short
 				var tmp = value.indexOf(' ', space + 1);
-				
+
 				if (tmp >= 0 && tmp <= maxLabelLength)
 				{
 					space = tmp;
 
 					// Add third word if label is short
 					var tmp = value.indexOf(' ', space + 1);
-					
+
 					if (tmp >= 0 && tmp <= maxLabelLength)
 					{
 						space = tmp;
 					}
 				}
-				
+
 				if (space >= 0)
 				{
 					value = value.substring(0, space);
@@ -2050,7 +2050,7 @@ Draw.loadPlugin(function(ui) {
 		graph.getWordForCell = function(cell, ignoreLabel)
 		{
 			var label = 'no';
-			
+
 			if (cell != null)
 			{
 				label = (ignoreLabel) ? null : firstWord(this.getLabel(cell));
@@ -2068,7 +2068,7 @@ Draw.loadPlugin(function(ui) {
 					else if (tmp != null)
 					{
 						var dot = tmp.lastIndexOf('.');
-						
+
 						if (dot >= 0)
 						{
 							tmp = tmp.substring(dot + 1);
@@ -2082,7 +2082,7 @@ Draw.loadPlugin(function(ui) {
 				div.innerHTML = label;
 				label = div.innerText;
 			}
-			
+
 			return label;
 		};
 
@@ -2096,17 +2096,17 @@ Draw.loadPlugin(function(ui) {
 			if (cells != null && keys != null && keys.length == 1 && values.length == 1)
 			{
 				var tmp = values[0];
-				
+
 				if (typeof tmp === 'string' && tmp.charAt(0) == '#')
 				{
 					var n_match  = ntc.name(tmp);
-					
+
 					//if (n_match[2]) /* exact match */
 					{
 						tmp = n_match[1];
 					}
 				}
-				
+
 				if (tmp == mxConstants.NONE || tmp == null)
 				{
 					App.say('Removed {1}', [keys[0]]);
@@ -2127,7 +2127,7 @@ Draw.loadPlugin(function(ui) {
 
 			// Resolves placeholders in new label
 			var value = this.getLabel(cell);
-			
+
 			if ((value != null && value.length > 20) ||
 				(old != null && old.length > 20))
 			{
@@ -2142,34 +2142,34 @@ Draw.loadPlugin(function(ui) {
 				App.say('{1}', [value]);
 			}
 		});
-		
+
 		graph.addListener(mxEvent.CELL_CONNECTED, function(sender, evt)
 		{
 //				console.log('CELL_CONNECTED', evt);
 //				var edge = evt.getProperty('edge');
 //				var terminal = evt.getProperty('terminal');
 //				var other = graph.model.getTerminal(edge, !evt.getProperty('source'));
-//				
+//
 //				if (other != null && terminal != null)
 //				{
 //					App.say('connected {1} to {2}', [getWordForCell(other), getWordForCell(terminal)]);
 //				}
 		});
-		
+
 		graph.addListener(mxEvent.CELLS_ADDED, function(sender, evt)
 		{
 			//console.log('CELLS_ADDED', evt);
 			var cells = evt.getProperty('cells');
-			
+
 			if (cells.length > 1)
 			{
 				var vertexCount = 0;
 				var edgeCount = 0;
-				
+
 				for (var i = 0; i < cells.length; i++)
 				{
 					var cell = cells[i];
-					
+
 					if (graph.model.isEdge(cell))
 					{
 						edgeCount++;
@@ -2183,7 +2183,7 @@ Draw.loadPlugin(function(ui) {
 				if (vertexCount > 0 && edgeCount > 0)
 				{
 					var tmp = '';
-					
+
 					if (vertexCount == 1)
 					{
 						tmp += 'One shape';
@@ -2192,9 +2192,9 @@ Draw.loadPlugin(function(ui) {
 					{
 						tmp += '{1} shapes';
 					}
-					
+
 					tmp += ' and ';
-					
+
 					if (edgeCount == 1)
 					{
 						tmp += 'one connection';
@@ -2203,7 +2203,7 @@ Draw.loadPlugin(function(ui) {
 					{
 						tmp += '{2} connections';
 					}
-					
+
 					App.say(tmp + ' inserted', [vertexCount, edgeCount]);
 				}
 				else if (vertexCount > 0)
@@ -2213,12 +2213,12 @@ Draw.loadPlugin(function(ui) {
 				else
 				{
 					App.say('{1} connections', [edgeCount]);
-				}	
+				}
 			}
 			else
 			{
 				cell = cells[0];
-			
+
 				if (graph.model.isEdge(cell) && graph.model.getTerminal(cell, true) != null &&
 					graph.model.getTerminal(cell, false) != null)
 				{
@@ -2236,10 +2236,10 @@ Draw.loadPlugin(function(ui) {
 				else if (graph.model.isVertex(cell))
 				{
 					lastInserted = cell;
-					
+
 					// Replaces camel case notation with spaces
 					var word = graph.getWordForCell(cell).replace(/([A-Z])/g, ' $1');
-					
+
 					App.say('{1}', [word]);
 				}
 			}
@@ -2248,7 +2248,7 @@ Draw.loadPlugin(function(ui) {
 		{
 			//console.log('CELLS_REMOVED', evt);
 			var cells = evt.getProperty('cells');
-			
+
 			if (cells.length > 1)
 			{
 				App.say('{1} cells deleted', [cells.length]);
@@ -2379,7 +2379,7 @@ var ntc = {
   },
 
   names: [
-          
+
  // Added all standard HTML color names / gaudenz, oct-2015
 ["F0F8FF", "aliceblue"],
 ["FAEBD7", "antiquewhite"],
@@ -2528,9 +2528,9 @@ var ntc = {
 ["F5F5F5", "whitesmoke"],
 ["FFFF00", "yellow"],
 ["9ACD32", "yellowgreen"],
- 
+
 // Existing table
-          
+
 ["000000", "Black"],
 ["000080", "Navy Blue"],
 ["0000C8", "Dark Blue"],

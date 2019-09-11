@@ -271,9 +271,9 @@ Editor.prototype.initialTopSpacing = 0;
 Editor.prototype.appName = document.title;
 
 /**
- *
+ * TODO Masoud Added this
  */
-Editor.prototype.editBlankUrl = window.location.protocol + '//' + window.location.host + '/';
+Editor.prototype.editBlankUrl = window.location.protocol + '//' + window.location.host + '/' + window.location.pathname;
 
 /**
  * Initializes the environment.

@@ -143,10 +143,18 @@ mxForm.prototype.addTextarea = function(name, value, rows)
  * 
  * Adds a combo for the given name and returns the combo.
  */
-mxForm.prototype.addCombo = function(name, isMultiSelect, size)
+mxForm.prototype.addCombo = function(name, isMultiSelect, size, width, onChange)
 {
 	var select = document.createElement('select');
-	
+
+	if(typeof onChange == 'function') {
+        mxEvent.addListener(select, 'change', onChange);
+	}
+
+	if(width != null) {
+		select.style.width = width;
+	}
+
 	if (size != null)
 	{
 		select.setAttribute('size', size);

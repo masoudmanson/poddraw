@@ -4412,7 +4412,8 @@
 			params.push('title=' + encodeURIComponent(file.getTitle()));
 		}
 
-		return 'http://' + window.location.host + '/' + ((params.length > 0) ? '?' + params.join('&') : '') + data;
+		// TODO Masoud
+		return 'http://' + window.location.host + '/' + window.location.pathname + ((params.length > 0) ? '?' + params.join('&') : '') + data;
 
 		// return ((mxClient.IS_CHROMEAPP || EditorUi.isElectronApp || !(/.*\.draw\.io$/.test(window.location.hostname))) ? 'https://www.draw.io/' : 'https://' + window.location.host + '/') +
 		// 	((params.length > 0) ? '?' + params.join('&') : '') + data;
@@ -4504,7 +4505,7 @@
 			'" data-mxgraph="' + mxUtils.htmlEntities(JSON.stringify(data)) + '"></div>';
 
 		var fetchParam = (publicUrl != null) ? '&fetch=' + encodeURIComponent(publicUrl) : '';
-		var s2 = (fetchParam.length > 0) ? (urlParams['dev'] == '1') ? 'http://' + window.location.host + '/embed2.js?dev=1' : 'http://' + window.location.host + '/embed2.js?' + fetchParam : 'http://' + window.location.host + '/' + 'js/viewer.min.js';
+		var s2 = (fetchParam.length > 0) ? ('1' == '1') ? 'http://' + window.location.host + '/embed2.js?dev=1' : 'http://' + window.location.host + '/embed2.js?' + fetchParam : 'http://' + window.location.host + '/' + 'js/viewer.min.js';
 		var scr = '<script type="text/javascript" src="' + s2 + '"></script>';
 
 		fn(value, scr);
@@ -6427,7 +6428,7 @@
 		{
 			this.loadingExtensions = true;
 
-			if (urlParams['dev'] == '1')
+			if ('1' == '1')
 			{
 				mxscript('js/diagramly/Extensions.js', delayed);
 			}
@@ -7758,7 +7759,7 @@
 				}
 			}
 
-			if (urlParams['dev'] == '1')
+			if ('1' == '1')
 			{
 				params += ((params.length > 0) ? '&' : '?') + 'dev=1&drawdev=1';
 			}

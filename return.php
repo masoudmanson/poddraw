@@ -7,7 +7,7 @@ $_SESSION['keylead_code']=$_GET['code'];
 $url = $config['sso'].'/token/';
 $ch = curl_init($url);
 
-//TODO : remove this hit
+//TODO : remove this
 curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
 

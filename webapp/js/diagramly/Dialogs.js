@@ -4320,7 +4320,8 @@ var FeedbackDialog = function(editorUi) {
 
             if (editorUi.spinner.spin(document.body)) {
                 // TODO: Set Fanap Feedback Email
-                var postUrl = (FeedbackDialog.feedbackUrl != null) ? FeedbackDialog.feedbackUrl : '/email';
+                // var postUrl = (FeedbackDialog.feedbackUrl != null) ? FeedbackDialog.feedbackUrl : '/email';
+                var postUrl = window.location.origin + '/poddraw/email.php';
                 mxUtils.post(postUrl, 'email=' + encodeURIComponent(email.value) +
                     '&version=' + encodeURIComponent(EditorUi.VERSION) +
                     '&url=' + encodeURIComponent(window.location.href) +

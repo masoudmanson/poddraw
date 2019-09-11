@@ -1500,7 +1500,7 @@ var EditDataDialog = function(ui, cell) {
             else {
                 console.log(result);
                 mxUtils.alert(result.errorMessage);
-                // addTextArea(index, name, value);
+                addTextArea(index, name, value);
             }
         });
     };
@@ -1531,7 +1531,7 @@ var EditDataDialog = function(ui, cell) {
 
     if (id != null) {
         var text = document.createElement('input');
-        text.style.width = '265px';
+        text.style.width = 'calc(100% - 26px)';
         text.style.textAlign = 'center';
         text.setAttribute('type', 'text');
         text.setAttribute('readOnly', 'true');
@@ -1561,8 +1561,8 @@ var EditDataDialog = function(ui, cell) {
     var nameInput = document.createElement('input');
     nameInput.setAttribute('placeholder', mxResources.get('enterPropertyName'));
     nameInput.setAttribute('type', 'text');
-    nameInput.setAttribute('size', (mxClient.IS_IE || mxClient.IS_IE11) ? '16' : '20');
     nameInput.style.marginLeft = '2px';
+    nameInput.style.width = "calc(100% - 185px)";
 
     newProp.appendChild(nameInput);
     top.appendChild(newProp);
@@ -1628,7 +1628,6 @@ var EditDataDialog = function(ui, cell) {
                         addRemoveButton(text, name);
                         text.focus();
                     }
-
                 }
 
                 nameInput.value = '';

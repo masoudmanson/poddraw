@@ -35,7 +35,7 @@
 	var originalNoFo = mxClient.NO_FO;
 	var mathJaxLoading = (typeof(MathJax) !== 'undefined' && typeof(MathJax.Hub) !== 'undefined');
 	var mathJaxQueue = [];
-	
+
 	function loadMathJax()
 	{
 		// Uses existing configuration if MathJax already in page
@@ -60,7 +60,7 @@
 						  extensions: ['AMSmath.js', 'AMSsymbols.js', 'noErrors.js', 'noUndefined.js']
 						}
 					});
-					
+
 					MathJax.Hub.Register.StartupHook('Begin', function()
 					{
 						for (var i = 0; i < mathJaxQueue.length; i++)
@@ -73,11 +73,11 @@
 
 			var script = document.createElement('script');
 			script.type = 'text/javascript';
-			script.src = 'https://math.draw.io/current/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+			script.src = './MathJax.js?config=TeX-MML-AM_HTMLorMML';
 			document.getElementsByTagName('head')[0].appendChild(script);
 		}
 	};
-	
+
 	function addMathJaxGraph(graph)
 	{
 		// Initial rendering when MathJax finished loading
@@ -89,7 +89,7 @@
 		{
 			mathJaxQueue.push(graph.container);
 		}
-		
+
 		// Rendering math again on repaint
 		graph.addListener(mxEvent.SIZE, function(sender, evt)
 		{
@@ -99,7 +99,7 @@
 			}
 		});
 	};
-	
+
 	// Handles relative images
 	mxGraph.prototype.getImageFromBundles = function(key)
 	{
@@ -111,16 +111,16 @@
 				{
 					key = key.substring(1, key.length);
 				}
-				
+
 				key = 'https://www.draw.io/' + key;
 			}
-			
+
 			return key;
 		}
-		
+
 		return null;
 	};
-	
+
 	if (stencils != null)
 	{
 		for (var i = 0; i < stencils.length; i++)
@@ -129,7 +129,7 @@
 			mxStencilRegistry.parseStencilSet(xmlDoc.documentElement);
 		}
 	}
-	
+
 	// Panning for touch devices
 	if (mxClient.IS_TOUCH)
 	{
@@ -138,7 +138,7 @@
 			return true;
 		};
 	}
-	
+
 	(function()
 	{
 		function initGraph(container)
@@ -146,12 +146,12 @@
 			try
 			{
 				var child = container.firstChild;
-				
+
 				while (child != null && child.nodeType != mxConstants.NODETYPE_ELEMENT)
 				{
 					child = child.nextSibling;
 				}
-				
+
 				var xml = mxUtils.trim(child.innerHTML);
 				container.innerHTML = '';
 
@@ -172,7 +172,7 @@
 				{
 					xml = graph.decompress(xml);
 				}
-				
+
 				var xmlDocument = mxUtils.parseXml(xml);
 				var configNode = null;
 				var diagrams = null;
@@ -181,7 +181,7 @@
 				{
 					diagrams = xmlDocument.documentElement.getElementsByTagName('diagram');
 					configNode = xmlDocument.documentElement;
-					
+
 					if (diagrams.length > 0)
 					{
 						xml = mxUtils.getTextContent(diagrams[0]);
@@ -189,12 +189,12 @@
 						xmlDocument = mxUtils.parseXml(xml);
 					}
 				}
-				
+
 				if (xmlDocument.documentElement != null && xmlDocument.documentElement.nodeName == 'mxGraphModel')
 				{
 					var decoder = new mxCodec(xmlDocument);
 					var node = xmlDocument.documentElement;
-					
+
 					if (configNode == null)
 					{
 						configNode = node;
@@ -209,7 +209,7 @@
 						 * Adds placeholder for %page% and %pagenumber%
 						 */
 						var graphGetGlobalVariable = graph.getGlobalVariable;
-						
+
 						graph.getGlobalVariable = function(name)
 						{
 							if (name == 'page')
@@ -220,16 +220,16 @@
 							{
 								return 1;
 							}
-							
+
 							return graphGetGlobalVariable.apply(this, arguments);
 						};
 					}
-					
+
 					graph.foldingEnabled = configNode.getAttribute('nav') == '1';
 					graph.cellRenderer.forceControlClickHandler = graph.foldingEnabled;
-					
+
 					var tooltips = configNode.getAttribute('tooltips');
-					
+
 			    	if (tooltips != '0')
 			    	{
 			    		graph.setTooltips(true);
@@ -238,12 +238,12 @@
 			    	{
 			    		graph.setTooltips(false);
 			    	}
-					
+
 					// Workaround for parent div ignoring child size
 					if (mxClient.IS_VML)
 					{
 						var canvas = graph.view.getCanvas();
-						
+
 						if (canvas != null && canvas.nodeName == 'DIV')
 						{
 							canvas.style.position = 'relative';
@@ -257,18 +257,18 @@
 						var dec = new mxCodec(xmlDoc);
 						dec.decode(xmlDoc.documentElement, graph.getStylesheet());
 					}
-					
+
 					var math = configNode.getAttribute('math');
-					
+
 					if (math == '1')
 					{
 						mxClient.NO_FO = true;
 						loadMathJax();
 					}
-					
+
 					// Enables panning with left mouse button
 					var pan = configNode.getAttribute('pan');
-					
+
 					if (pan != '0')
 					{
 						graph.panningHandler.useLeftButtonForPanning = true;
@@ -280,13 +280,13 @@
 					{
 						container.style.cursor = 'default';
 					}
-					
+
 					var resize = configNode.getAttribute('resize');
 					var border = Number(configNode.getAttribute('border') || 0);
 					graph.border = border;
 
 					var fit = configNode.getAttribute('fit');
-					
+
 					if ((container.style.width != '100%' && fit != '1' && resize != '0') ||
 						(container.style.width == '' && container.style.height == ''))
 					{
@@ -300,7 +300,7 @@
 						{
 							graph.resizeContainer = true;
 							graph.centerZoom = false;
-							
+
 							graph.doResizeContainer = function(width, height)
 							{
 								// Fixes container size for different box models
@@ -309,7 +309,7 @@
 									if (mxClient.IS_QUIRKS)
 									{
 										var borders = this.getBorderSizes();
-										
+
 										// max(2, ...) required for native IE8 in quirks mode
 										width += Math.max(2, borders.x + borders.width + 1);
 										height += Math.max(2, borders.y + borders.height + 1);
@@ -329,7 +329,7 @@
 								{
 									height += 1;
 								}
-								
+
 								if (this.maximumContainerSize != null)
 								{
 									width = Math.min(this.maximumContainerSize.width, width);
@@ -344,16 +344,16 @@
 							graph.centerZoom = true;
 						}
 					}
-					
+
 					// Adds handling for hyperlinks, tooltips
 					var links = configNode.getAttribute('links');
 					var hl = configNode.getAttribute('highlight');
-					
+
 					if (links != '0' || tooltips != '0')
 					{
 						var cursor = container.style.cursor;
 				    	var tol = graph.getTolerance();
-						
+
 						graph.addMouseListener(
 						{
 						    currentState: null,
@@ -375,7 +375,7 @@
 						    		{
 								    	var dx = Math.abs(this.startX - me.getGraphX());
 								    	var dy = Math.abs(this.startY - me.getGraphY());
-								    	
+
 								    	if (dx > tol || dy > tol)
 								    	{
 								    		this.clear();
@@ -389,7 +389,7 @@
 							    	{
 						    			return;
 							    	}
-							    	
+
 									var tmp = graph.view.getState(me.getCell());
 
 							      	if (tmp != this.currentState)
@@ -398,9 +398,9 @@
 							        	{
 							          		this.clear();
 							        	}
-							        
+
 						        		this.currentState = tmp;
-							        
+
 							        	if (this.currentState != null)
 							        	{
 							          		this.activate(this.currentState);
@@ -412,8 +412,8 @@
 						    {
 						    	var tmp = this.currentLink;
 						    	this.clear();
-						    	
-						    	if (tmp != null) 
+
+						    	if (tmp != null)
 						    	{
 						    		if (tmp.charAt(0) == '#')
 						    		{
@@ -428,7 +428,7 @@
 						    activate: function(state)
 						    {
 						    	this.currentLink = graph.getLinkForCell(state.cell);
-						    	
+
 						    	if (this.currentLink != null)
 						    	{
 						    		container.style.cursor = 'pointer';
@@ -444,7 +444,7 @@
 						    	container.style.cursor = cursor;
 						    	this.currentState = null;
 						    	this.currentLink = null;
-						    	
+
 						    	if (this.highlight != null)
 						    	{
 						    		this.highlight.hide();
@@ -452,42 +452,42 @@
 						    }
 						});
 					}
-					
+
 					var x0 = Number(configNode.getAttribute('x0') || 0);
 					var y0 = Number(configNode.getAttribute('y0') || 0);
 					graph.view.translate.x = -x0 + border;
 					graph.view.translate.y = -y0 + border;
-					
+
 					function graphAdded(node)
 					{
 						var img = node.getAttribute('backgroundImage');
-						
+
 						if (img != null)
 						{
 							img = JSON.parse(img);
 							graph.setBackgroundImage(new mxImage(img.src, img.width, img.height));
 							graph.view.validateBackgroundImage();
 						}
-						
+
 						if (fit != '0')
 						{
 							graph.fit(border);
 						}
-						
+
 						if (math == '1')
 						{
 							addMathJaxGraph(graph);
 						}
-						
+
 						// Keeps hashtag links on same page
 						var links = graph.container.getElementsByTagName('a');
-						
+
 						if (links != null)
 						{
 							for (var i = 0; i < links.length; i++)
 							{
 								var href = links[i].getAttribute('href');
-								
+
 								if (href != null && href.charAt(0) == '#' &&
 									links[i].getAttribute('target') == '_blank')
 								{
@@ -496,10 +496,10 @@
 							}
 						}
 					};
-					
+
 					// Load from URL via url attribute
 					var url = configNode.getAttribute('url');
-					
+
 					if (url != null)
 					{
 						try
@@ -507,7 +507,7 @@
 							// Workaround for unsupported CORS in IE9 XHR
 							var xhr = (navigator.userAgent.indexOf('MSIE 9') > 0) ? new XDomainRequest() : new XMLHttpRequest();
 							xhr.open('GET', url);
-							
+
 						    xhr.onload = mxUtils.bind(this, function()
 						    {
 						    	try
@@ -516,28 +516,28 @@
 									{
 										mxClient.NO_FO = true;
 									}
-							    	
+
 							    	var data = (xhr.getText != null) ? xhr.getText() : xhr.responseText;
 
 							    	if (data != null)
 							    	{
 							    		var newDocument = mxUtils.parseXml(data);
-							    		
+
 							    		// LATER: Add support for .png (with XML) files
-							    		// Adds support for HTML 
+							    		// Adds support for HTML
 							    		if (newDocument != null && newDocument.documentElement.nodeName == 'html')
 							    		{
 							    			var divs = newDocument.documentElement.getElementsByTagName('div');
-							    			
+
 							    			if (divs.length > 0 && divs[0].getAttribute('class') == 'mxgraph')
 							    			{
 							    				var divs2 = divs[0].getElementsByTagName('div');
-							    				
+
 							    				if (divs2.length > 0)
 							    				{
 							    					var data = mxUtils.getTextContent(divs2[0]);
 							    	        		data = graph.decompress(data);
-							    	        		
+
 							    	        		if (data.length > 0)
 							    	        		{
 							    	        			newDocument = mxUtils.parseXml(data);
@@ -549,34 +549,34 @@
 							    		if (newDocument != null && newDocument.documentElement.nodeName == 'svg')
 							    		{
 							    			var tmp = newDocument.documentElement.getAttribute('content');
-							    			
+
 							    			if (tmp != null && tmp.charAt(0) != '<' && tmp.charAt(0) != '%')
 							    			{
 							    				tmp = unescape((window.atob) ? atob(tmp) : Base64.decode(cont, tmp));
 							    			}
-							    			
+
 							    			if (tmp != null && tmp.charAt(0) == '%')
 							    			{
 							    				tmp = decodeURIComponent(tmp);
 							    			}
-							    			
+
 							    			if (tmp != null && tmp.length > 0)
 							    			{
 							    				newDocument = mxUtils.parseXml(tmp);
 							    			}
 							    		}
-							    		
+
 							    		if (newDocument.documentElement.nodeName == 'mxfile')
 							    		{
 							    			var diagrams = newDocument.documentElement.getElementsByTagName('diagram');
-							    			
+
 							    			if (diagrams.length > 0)
 							    			{
 							    				data = graph.decompress(mxUtils.getTextContent(diagrams[0]));
 							    				newDocument = mxUtils.parseXml(data);
 							    			}
 							    		}
-							    		
+
 							    		decoder = new mxCodec(newDocument);
 							    		decoder.decode(newDocument.documentElement, graph.getModel());
 							    		graphAdded(newDocument.documentElement);
@@ -585,7 +585,7 @@
 							    	{
 							    		graph.container.innerHTML = 'Cannot load ' + url;
 							    	}
-							    	
+
 							    	mxClient.NO_FO = originalNoFo;
 						    	}
 								catch (e)
@@ -593,12 +593,12 @@
 									graph.container.innerHTML = 'Cannot load ' + url + ': ' + e.message;
 								}
 						    });
-						    
+
 						    xhr.onerror = function()
 						    {
 						    	graph.container.innerHTML = 'Cannot load ' + url;
 						    };
-						
+
 						    xhr.send();
 						}
 						catch (e)
@@ -617,7 +617,7 @@
 						graph.resizeContainer = true;
 						graph.centerZoom = false;
 					}
-					
+
 					// Adds zoom, edit etc in top, left corner
 					var buttons = document.createElement('div');
 					buttons.style.position = 'absolute';
@@ -625,12 +625,12 @@
 					buttons.style.cursor = 'pointer';
 
 					var bs = graph.getBorderSizes();
-					
+
 					var left = 0;
 					var fontSize = 10;
 					var bw = 16;
 					var bh = 16;
-					
+
 					if (mxClient.IS_QUIRKS)
 					{
 						bw -= 1;
@@ -642,7 +642,7 @@
 						bh = 24;
 						var fontSize = 14;
 					}
-					
+
 					function addButton(label, funct)
 					{
 						var btn = document.createElement('div');
@@ -656,7 +656,7 @@
 						btn.style.top = '0px';
 						btn.style.backgroundColor = 'white';
 						mxUtils.setOpacity(btn, 50);
-						
+
 						var table = document.createElement('table');
 						table.style.borderWidth = '0px';
 						table.style.width = '100%';
@@ -673,12 +673,12 @@
 						tbody.appendChild(tr);
 						table.appendChild(tbody);
 						btn.appendChild(table);
-		
+
 						mxEvent.addListener(btn, (mxClient.IS_POINTER) ? 'pointerdown' : 'mousedown', function(evt)
 						{
 							mxEvent.consume(evt);
 						});
-						
+
 						mxEvent.addListener(btn, (mxClient.IS_POINTER) ? 'pointerup' : 'mouseup', function(evt)
 						{
 							funct();
@@ -691,37 +691,37 @@
 							{
 								mxEvent.consume(evt);
 							});
-							
+
 							mxEvent.addListener(btn, 'touchend', function(evt)
 							{
 								funct();
 								mxEvent.consume(evt);
 							});
 						}
-						
+
 						left += bw;
 						buttons.appendChild(btn);
-						
+
 						return btn;
 					};
-													
+
 					var zoom = configNode.getAttribute('zoom');
-					
+
 					if (zoom != '0')
 					{
 						addButton('+', function()
 						{
 							graph.zoomIn();
 						});
-						
+
 						addButton('-', function()
 						{
 							graph.zoomOut();
 						});
 					}
-					
+
 					var edit = configNode.getAttribute('edit');
-					
+
 					if (edit != null)
 					{
 						var button = addButton('', function()
@@ -737,7 +737,7 @@
 								else
 								{
 									var wnd = null;
-								
+
 									var receive = function(evt)
 									{
 										if (evt.data == 'ready' && evt.source == wnd)
@@ -746,7 +746,7 @@
 											window.removeEventListener('message', receive);
 										}
 									};
-									
+
 									window.addEventListener('message', receive);
 									wnd = window.open('https://www.draw.io/?client=1');
 								}
@@ -756,25 +756,25 @@
 								window.open(edit);
 							}
 						});
-						
+
 						// Do not use HTML entity to avoid problems with XHTML
 						button.innerHTML = '...';
 					}
-					
+
 					function show()
 					{
 						buttons.style.top = (container.offsetTop + bs.y) + 'px';
 						buttons.style.left = (container.offsetLeft + bs.x) + 'px';
 						buttons.style.visibility = 'visible';
 					};
-					
+
 					if (!mxClient.IS_POINTER && !mxClient.IS_TOUCH)
 					{
 						function hide()
 						{
 							buttons.style.visibility = 'hidden';
 						};
-						
+
 						mxEvent.addListener(container, 'mouseover', show);
 						mxEvent.addListener(buttons, 'mouseover', show);
 						mxEvent.addListener(container, 'mouseout', hide);
@@ -785,7 +785,7 @@
 					{
 						show();
 					}
-					
+
 					if (buttons.firstChild != null)
 					{
 						if (container.nextSibling != null)
@@ -797,7 +797,7 @@
 							container.parentNode.appendChild(buttons);
 						}
 					}
-					
+
 					if (typeof(window.mxClientOnCreate) == 'function')
 					{
 						window.mxClientOnCreate(graph);
@@ -811,12 +811,12 @@
 					console.log('Error:', err);
 				}
 			}
-			
+
 			mxClient.NO_FO = originalNoFo;
-			
+
 			return graph;
 		};
-		
+
 		if (typeof(mxClientOnLoad) == 'function')
 		{
 			mxClientOnLoad(stylesheet, initGraph);
@@ -825,12 +825,12 @@
 		{
 			var tmp = document.getElementsByTagName('*');
 			var divs = [];
-			
+
 			for (var i = 0; i < tmp.length; i++)
 			{
 				divs.push(tmp[i]);
 			}
-			
+
 			for (var i = 0; i < divs.length; i++)
 			{
 				if (divs[i].className.toString().indexOf('mxgraph') >= 0)

@@ -5,6 +5,7 @@
     <property file="build.properties"/>
     <taskdef name="jscomp" classname="com.google.javascript.jscomp.ant.CompileTask" classpath="${jscompiler}"/>
 
+    <!--Shapes-->
     <target name="merge">
         <concat destfile="${basedir}/../../build/shapes.js" fixlastline="yes" append="no">
             <fileset dir="${war.dir}/shapes" includes="**/*.js"/>
@@ -163,6 +164,7 @@
                 <file name="Init.js"/>
             </sources>
 
+            <!--TODO Compile mxClient.js again-->
             <sources dir="${basedir}/../mxgraph">
                 <file name="mxClient.js"/>
             </sources>
@@ -384,35 +386,4 @@
 
     <target name="all" depends="app">
     </target>
-
-    <!-- ================== Stand-alone war creation ============================= -->
-
-    <!--<path id="javac.class.path">-->
-    <!--<fileset dir="${war.dir}/WEB-INF/lib" />-->
-    <!--</path>-->
-
-    <!--<target name="javac" depends="app" description="Java compilation">-->
-    <!--<mkdir dir="${javac.dir}"/>-->
-    <!--<javac includeantruntime="false" srcdir="${src.dir}" excludes="**/EmbedServlet2.java" destdir="${javac.dir}">-->
-    <!--<classpath refid="javac.class.path" />-->
-    <!--</javac>-->
-    <!--<copy todir="${javac.dir}" file="${src.dir}/log4j.properties" />-->
-    <!--</target>-->
-
-    <!--<target name="clean" description="Cleans build directories">-->
-    <!--<delete failonerror="false">-->
-    <!--<fileset dir="${javac.dir}">-->
-    <!--</fileset>-->
-    <!--<fileset dir="${build.dir}">-->
-    <!--</fileset>-->
-    <!--</delete>-->
-    <!--<delete file="${basedir}/base.min.js"/>-->
-    <!--<delete file="${basedir}/base-viewer.min.js"/>-->
-    <!--</target>-->
-    <!---->
-    <!--<target name="war" depends="javac" description="Create the stand-alone war file">-->
-    <!--<zip destfile="${build.dir}/${war.name}" basedir="${war.dir}" >-->
-    <!--</zip>-->
-    <!--</target>-->
-
 </project>

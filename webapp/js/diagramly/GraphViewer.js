@@ -100,7 +100,7 @@ GraphViewer.prototype.init = function(container, xmlNode, graphConfig)
 			{
 				this.graph = new Graph(container);
 				this.graph.transparentBackground = false;
-				
+
 				if (this.graphConfig.move)
 				{
 					this.graph.isMoveCellsEvent = function(evt)
@@ -108,13 +108,13 @@ GraphViewer.prototype.init = function(container, xmlNode, graphConfig)
 						return true;
 					};
 				}
-		
+
 				// Adds lightbox and link handling for shapes
 				if (this.lightboxClickEnabled)
 				{
 					container.style.cursor = 'pointer';
 				}
-				
+
 				// Hack for using EditorUi methods on the graph instance
 				this.editor = new Editor(true, null, null, this.graph);
 				this.editor.editBlankUrl = this.editBlankUrl;
@@ -123,35 +123,35 @@ GraphViewer.prototype.init = function(container, xmlNode, graphConfig)
 				this.graph.autoExtend = false;
 				this.graph.autoScroll = false;
 				this.graph.setEnabled(false);
-				
+
 				// Handles relative images
 				var self = this;
-				
+
 				this.graph.getImageFromBundles = function(key)
 				{
 					return self.getImageUrl(key);
 				};
-		
+
 				if (mxClient.IS_SVG)
 				{
 					// LATER: Add shadow for labels in graph.container (eg. math, NO_FO), scaling
 					this.editor.graph.addSvgShadow(this.graph.view.canvas.ownerSVGElement, null, true);
 				}
-				
+
 				// Adds page placeholders
 				if (xmlNode.nodeName == 'mxfile')
 				{
 					var diagrams = xmlNode.getElementsByTagName('diagram');
-					
+
 					if (diagrams.length > 0)
 					{
 						var graphGetGlobalVariable = this.graph.getGlobalVariable;
 						var self = this;
-						
+
 						this.graph.getGlobalVariable = function(name)
 						{
 							var diagram = diagrams[self.currentPage];
-							
+
 							if (name == 'page')
 							{
 								return diagram.getAttribute('name') || 'Page-' + (self.currentPage + 1);
@@ -160,26 +160,26 @@ GraphViewer.prototype.init = function(container, xmlNode, graphConfig)
 							{
 								return self.currentPage + 1;
 							}
-							
+
 							return graphGetGlobalVariable.apply(this, arguments);
 						};
 					}
 				}
-				
+
 				this.diagrams = [];
 				var lastXmlNode = null;
-				
+
 				this.selectPage = function(number)
 				{
 					this.currentPage = mxUtils.mod(number, this.diagrams.length);
 					this.updateGraphXml(mxUtils.parseXml(this.graph.decompress(mxUtils.getTextContent(
 						this.diagrams[this.currentPage]))).documentElement);
 				};
-				
+
 				this.selectPageById = function(id)
 				{
 					var found = false;
-					
+
 					for (var i = 0; i < this.diagrams.length; i++)
 					{
 						if (this.diagrams[i].getAttribute('id') == id)
@@ -189,10 +189,10 @@ GraphViewer.prototype.init = function(container, xmlNode, graphConfig)
 							break;
 						}
 					}
-					
+
 					return found;
 				};
-				
+
 				var update = mxUtils.bind(this, function()
 				{
 					if (this.xmlNode == null || this.xmlNode.nodeName != 'mxfile')
@@ -205,11 +205,11 @@ GraphViewer.prototype.init = function(container, xmlNode, graphConfig)
 						lastXmlNode = this.xmlNode;
 					}
 				});
-				
+
 				// LATER: Add event for setGraphXml
 				this.addListener('xmlNodeChanged', update);
 				update();
-	
+
 				// Passes current page via urlParams global variable
 				// to let the parser know which page we're using
 				urlParams['page'] = self.currentPage;
@@ -219,7 +219,7 @@ GraphViewer.prototype.init = function(container, xmlNode, graphConfig)
 				{
 					// Required for correct parsing of fold parameter
 					urlParams['nav'] = (this.graphConfig.nav != false) ? '1' : '0';
-					
+
 					this.editor.setGraphXml(this.xmlNode);
 					this.graph.border = (this.graphConfig.border != null) ? this.graphConfig.border : 8;
 					this.graph.view.scale = this.graphConfig.zoom || 1;
@@ -228,7 +228,7 @@ GraphViewer.prototype.init = function(container, xmlNode, graphConfig)
 				{
 					this.graph.getModel().endUpdate();
 				}
-		
+
 				// Adds left-button panning only if scrollbars are visible
 				this.graph.panningHandler.useLeftButtonForPanning = true;
 				this.graph.panningHandler.isForcePanningEvent = function(me)
@@ -240,7 +240,7 @@ GraphViewer.prototype.init = function(container, xmlNode, graphConfig)
 				this.graph.panningHandler.pinchEnabled = false;
 				this.graph.panningHandler.ignoreCell = true;
 				this.graph.setPanning(false);
-		
+
 				this.addSizeHandler();
 				this.showLayers(this.graph);
 				this.addClickHandler(this.graph);
@@ -249,17 +249,17 @@ GraphViewer.prototype.init = function(container, xmlNode, graphConfig)
 					translate: this.graph.view.translate.clone(),
 					scale: this.graph.view.scale
 				};
-				
+
 				var self = this;
-				
+
 				this.graph.customLinkClicked = function(href)
 				{
 					var done = true;
-					
+
 					if (href.substring(0, 13) == 'data:page/id,')
 					{
 						var comma = href.indexOf(',');
-						
+
 						if (!self.selectPageById(href.substring(comma + 1)))
 						{
 							done = false;
@@ -270,10 +270,10 @@ GraphViewer.prototype.init = function(container, xmlNode, graphConfig)
 					{
 						this.handleCustomLink(href);
 					}
-					
+
 					return done;
 				};
-				
+
 				if (this.graphConfig.toolbar != null)
 				{
 					this.addToolbar();
@@ -282,19 +282,19 @@ GraphViewer.prototype.init = function(container, xmlNode, graphConfig)
 				{
 					container.setAttribute('title', this.graphConfig.title);
 				}
-				
+
 				this.fireEvent(new mxEventObject('render'));
 			});
 
 			var MutObs = window.MutationObserver ||
 				window.WebKitMutationObserver ||
 				window.MozMutationObserver;
-			
+
 			if (this.checkVisibleState && container.offsetWidth == 0 && typeof MutObs !== 'undefined')
 			{
 				// Delayed rendering if inside hidden container and event available
 				var par = this.getObservableParent(container);
-			
+
 				var observer = new MutObs(mxUtils.bind(this, function(mutation)
 				{
 					if (container.offsetWidth > 0)
@@ -303,7 +303,7 @@ GraphViewer.prototype.init = function(container, xmlNode, graphConfig)
 						render();
 					}
 				}));
-				
+
 				observer.observe(par, {attributes: true});
 			}
 			else
@@ -316,23 +316,23 @@ GraphViewer.prototype.init = function(container, xmlNode, graphConfig)
 };
 
 /**
- * 
+ *
  */
 GraphViewer.prototype.getObservableParent = function(container)
 {
 	var node = container.parentNode;
-	
+
 	while (node != document.body && node.parentNode != null &&
 		mxUtils.getCurrentStyle(node).display !== 'none')
 	{
 		node = node.parentNode;
 	}
-	
+
 	return node;
 };
 
 /**
- * 
+ *
  */
 GraphViewer.prototype.getImageUrl = function(url)
 {
@@ -343,28 +343,28 @@ GraphViewer.prototype.getImageUrl = function(url)
 		{
 			url = url.substring(1, url.length);
 		}
-		
+
 		url = this.imageBaseUrl + url;
 	}
-	
+
 	return url;
 };
 
 /**
- * 
+ *
  */
 GraphViewer.prototype.setXmlNode = function(xmlNode)
 {
 	this.xmlDocument = xmlNode.ownerDocument;
 	this.xml = mxUtils.getXml(xmlNode);
 	this.xmlNode = xmlNode;
-	
+
 	this.updateGraphXml(xmlNode);
 	this.fireEvent(new mxEventObject('xmlNodeChanged'));
 };
 
 /**
- * 
+ *
  */
 GraphViewer.prototype.setFileNode = function(xmlNode)
 {
@@ -374,12 +374,12 @@ GraphViewer.prototype.setFileNode = function(xmlNode)
 		this.xml = mxUtils.getXml(xmlNode);
 		this.xmlNode = xmlNode;
 	}
-	
+
 	this.setGraphXml(xmlNode);
 };
 
 /**
- * 
+ *
  */
 GraphViewer.prototype.updateGraphXml = function(xmlNode)
 {
@@ -388,7 +388,7 @@ GraphViewer.prototype.updateGraphXml = function(xmlNode)
 };
 
 /**
- * 
+ *
  */
 GraphViewer.prototype.setGraphXml = function(xmlNode)
 {
@@ -398,7 +398,7 @@ GraphViewer.prototype.setGraphXml = function(xmlNode)
 		this.graph.view.scale = 1;
 		this.graph.getModel().clear();
 		this.editor.setGraphXml(xmlNode);
-				
+
 		// Restores initial CSS state
 		if (this.widthIsEmpty)
 		{
@@ -409,7 +409,7 @@ GraphViewer.prototype.setGraphXml = function(xmlNode)
 		{
 			this.graph.container.style.width = this.initialWidth;
 		}
-		
+
 		this.positionGraph();
 		this.graph.initialViewState = {
 			translate: this.graph.view.translate.clone(),
@@ -419,7 +419,7 @@ GraphViewer.prototype.setGraphXml = function(xmlNode)
 };
 
 /**
- * 
+ *
  */
 GraphViewer.prototype.addSizeHandler = function()
 {
@@ -427,14 +427,14 @@ GraphViewer.prototype.addSizeHandler = function()
 	var bounds = this.graph.getGraphBounds();
 	var updatingOverflow = false;
 	container.style.overflow = 'hidden';
-	
+
 	var updateOverflow = mxUtils.bind(this, function()
 	{
 		if (!updatingOverflow)
 		{
 			updatingOverflow = true;
 			var tmp = this.graph.getGraphBounds();
-			
+
 			if (container.offsetWidth <= tmp.width + 2 * this.graph.border * this.graph.view.scale)
 			{
 				container.style.overflow = 'auto';
@@ -443,19 +443,19 @@ GraphViewer.prototype.addSizeHandler = function()
 			{
 				container.style.overflow = 'hidden';
 			}
-			
+
 			if (this.toolbar != null)
 			{
 				var r = container.getBoundingClientRect();
-				
+
 				// Workaround for position:relative set in ResizeSensor
 				var origin = mxUtils.getScrollOrigin(document.body)
 				var b = (document.body.style.position === 'relative') ? document.body.getBoundingClientRect() :
 					{left: -origin.x, top: -origin.y};
 				r = {left: r.left - b.left, top: r.top - b.top, bottom: r.bottom - b.top, right: r.right - b.left};
-				
+
 				this.toolbar.style.left = r.left + 'px';
-				
+
 				if (this.graphConfig['toolbar-position'] == 'bottom')
 				{
 					this.toolbar.style.top = r.bottom - 1 + 'px';
@@ -473,7 +473,7 @@ GraphViewer.prototype.addSizeHandler = function()
 					}
 				}
 			}
-			
+
 			updatingOverflow = false;
 		}
 	});
@@ -481,12 +481,12 @@ GraphViewer.prototype.addSizeHandler = function()
 	var lastOffsetWidth = null;
 	var cachedOffsetWidth = null;
 	var handlingResize = false;
-	
+
 	// Installs function on instance
 	this.fitGraph = function(maxScale)
 	{
 		var cachedOffsetWidth = container.offsetWidth;
-		
+
 		if (cachedOffsetWidth != lastOffsetWidth)
 		{
 			if (!handlingResize)
@@ -497,7 +497,7 @@ GraphViewer.prototype.addSizeHandler = function()
 					((this.allowZoomIn) ? null : 1));
 				this.graph.fit(null, null, null, null, false, true);
 				this.graph.maxFitScale = null;
-				
+
 				var tmp = this.graph.getGraphBounds();
 				this.updateContainerHeight(container, tmp.height + 2 * this.graph.border + 1);
 
@@ -505,9 +505,9 @@ GraphViewer.prototype.addSizeHandler = function()
 					translate: this.graph.view.translate.clone(),
 					scale: this.graph.view.scale
 				};
-				
+
 				lastOffsetWidth = cachedOffsetWidth;
-				
+
 				// Workaround for fit triggering scrollbars triggering doResize (infinite loop)
 				window.setTimeout(function()
 				{
@@ -530,7 +530,7 @@ GraphViewer.prototype.addSizeHandler = function()
 			new ResizeSensor(this.graph.container, updateOverflow);
 		}
 	}
-	
+
 	if (this.graphConfig.resize || ((this.zoomEnabled || !this.autoFit) && this.graphConfig.resize != false))
 	{
 		this.graph.minimumContainerSize = new mxRectangle(0, 0, 100, 1);
@@ -543,7 +543,7 @@ GraphViewer.prototype.addSizeHandler = function()
 		{
 			this.updateContainerWidth(container, bounds.width + 2 * this.graph.border);
 		}
-		
+
 		this.updateContainerHeight(container, bounds.height + 2 * this.graph.border + 1);
 
 		if (!this.zoomEnabled && this.autoFit)
@@ -551,17 +551,17 @@ GraphViewer.prototype.addSizeHandler = function()
 			var lastOffsetWidth = null;
 			var scheduledResize = null;
 			var cachedOffsetWidth = null;
-			
+
 			var doResize = mxUtils.bind(this, function()
 			{
 				window.clearTimeout(scheduledResize);
-				
+
 				if (!handlingResize)
 				{
 					scheduledResize = window.setTimeout(mxUtils.bind(this, this.fitGraph), 100);
 				}
 			});
-			
+
 			// Fallback for older browsers
 			if (GraphViewer.useResizeSensor)
 			{
@@ -585,18 +585,18 @@ GraphViewer.prototype.addSizeHandler = function()
 	{
 		// Allocates maximum width while setting initial view state
 		var prev = container.style.minWidth;
-		
+
 		if (this.widthIsEmpty)
 		{
 			container.style.minWidth = '100%';
 		}
-		
+
 		if (container.offsetWidth > 0 && (this.allowZoomIn ||
 			(bounds.width + 2 * this.graph.border > container.offsetWidth ||
 			bounds.height + 2 * this.graph.border > this.graphConfig['max-height'])))
 		{
 			var maxScale = null;
-			
+
 			if (this.graphConfig['max-height'] != null)
 			{
 				maxScale = this.graphConfig['max-height'] / (bounds.height + 2 * this.graph.border);
@@ -610,7 +610,7 @@ GraphViewer.prototype.addSizeHandler = function()
 				Math.floor((this.graph.border - bounds.y) / this.graph.view.scale));
 			lastOffsetWidth = container.offsetWidth;
 		}
-		
+
 		container.style.minWidth = prev
 	});
 
@@ -633,7 +633,7 @@ GraphViewer.prototype.addSizeHandler = function()
 };
 
 /**
- * 
+ *
  */
 GraphViewer.prototype.updateContainerWidth = function(container, width)
 {
@@ -641,7 +641,7 @@ GraphViewer.prototype.updateContainerWidth = function(container, width)
 };
 
 /**
- * 
+ *
  */
 GraphViewer.prototype.updateContainerHeight = function(container, height)
 {
@@ -653,33 +653,33 @@ GraphViewer.prototype.updateContainerHeight = function(container, height)
 };
 
 /**
- * Shows the 
+ * Shows the
  */
 GraphViewer.prototype.showLayers = function(graph, sourceGraph)
 {
 	var layers = this.graphConfig.layers;
-	
+
 	if (layers != null || sourceGraph != null)
 	{
 		var idx = (layers != null) ? layers.split(' ') : null;
-		
+
 		if (sourceGraph != null || idx.length > 0)
 		{
 			var source = (sourceGraph != null) ? sourceGraph.getModel() : null;
 			var model = graph.getModel();
 			model.beginUpdate();
-			
+
 			try
 			{
 				var childCount = model.getChildCount(model.root);
-				
+
 				// Hides all layers
 				for (var i = 0; i < childCount; i++)
 				{
 					model.setVisible(model.getChildAt(model.root, i),
 						(sourceGraph != null) ? source.isVisible(source.getChildAt(source.root, i)) : false);
 				}
-				
+
 				// Shows specified layers (eg. 0 1 3)
 				if (source == null)
 				{
@@ -698,13 +698,13 @@ GraphViewer.prototype.showLayers = function(graph, sourceGraph)
 };
 
 /**
- * 
+ *
  */
 GraphViewer.prototype.addToolbar = function()
 {
 	var container = this.graph.container;
 	var initialCursor = this.graph.container.style.cursor;
-	
+
 	if (this.graphConfig['toolbar-position'] == 'bottom')
 	{
 		container.style.marginBottom = this.toolbarHeight + 'px';
@@ -724,16 +724,16 @@ GraphViewer.prototype.addToolbar = function()
 	toolbar.style.backgroundColor = '#eee';
 	toolbar.style.height = this.toolbarHeight + 'px';
 	this.toolbar = toolbar;
-	
+
 	if (this.graphConfig['toolbar-position'] == 'inline')
 	{
 		mxUtils.setPrefixedStyle(toolbar.style, 'transition', 'opacity 100ms ease-in-out');
 		mxUtils.setOpacity(toolbar, 30);
-		
+
 		// Changes toolbar opacity on hover
 		var fadeThread = null;
 		var fadeThread2 = null;
-		
+
 		var fadeOut = mxUtils.bind(this, function(delay)
 		{
 			if (fadeThread != null)
@@ -741,18 +741,18 @@ GraphViewer.prototype.addToolbar = function()
 				window.clearTimeout(fadeThread);
 				fadeThead = null;
 			}
-			
+
 			if (fadeThread2 != null)
 			{
 				window.clearTimeout(fadeThread2);
 				fadeThead2 = null;
 			}
-			
+
 			fadeThread = window.setTimeout(mxUtils.bind(this, function()
 			{
 			 	mxUtils.setOpacity(toolbar, 0);
 				fadeThread = null;
-			 	
+
 				fadeThread2 = window.setTimeout(mxUtils.bind(this, function()
 				{
 					toolbar.style.display = 'none';
@@ -760,7 +760,7 @@ GraphViewer.prototype.addToolbar = function()
 				}), 100);
 			}), delay || 200);
 		});
-		
+
 		var fadeIn = mxUtils.bind(this, function(opacity)
 		{
 			if (fadeThread != null)
@@ -768,17 +768,17 @@ GraphViewer.prototype.addToolbar = function()
 				window.clearTimeout(fadeThread);
 				fadeThead = null;
 			}
-			
+
 			if (fadeThread2 != null)
 			{
 				window.clearTimeout(fadeThread2);
 				fadeThead2 = null;
 			}
-			
+
 			toolbar.style.display = '';
 			mxUtils.setOpacity(toolbar, opacity || 30);
 		});
-		
+
 		mxEvent.addListener(this.graph.container, (mxClient.IS_POINTER) ? 'pointermove' : 'mousemove', mxUtils.bind(this, function(evt)
 		{
 			if (!mxEvent.isTouchEvent(evt))
@@ -787,12 +787,12 @@ GraphViewer.prototype.addToolbar = function()
 				fadeOut();
 			}
 		}));
-		
+
 		mxEvent.addListener(toolbar, (mxClient.IS_POINTER) ? 'pointermove' : 'mousemove', function(evt)
 		{
 			mxEvent.consume(evt);
 		});
-		
+
 		mxEvent.addListener(toolbar, 'mouseenter', mxUtils.bind(this, function(evt)
 		{
 			fadeIn(100);
@@ -811,7 +811,7 @@ GraphViewer.prototype.addToolbar = function()
 				fadeIn(30);
 			}
 		}));
-		
+
 		// Shows/hides toolbar for touch devices
 		var graph = this.graph;
 		var tol = graph.getTolerance();
@@ -852,10 +852,10 @@ GraphViewer.prototype.addToolbar = function()
 		    }
 		});
 	}
-	
+
 	var tokens = this.toolbarItems;
 	var buttonCount = 0;
-	
+
 	function addButton(fn, imgSrc, tip, enabled)
 	{
 		var a = document.createElement('div');
@@ -867,7 +867,7 @@ GraphViewer.prototype.addToolbar = function()
 		{
 			a.setAttribute('title', tip);
 		}
-		
+
 		if (mxClient.IS_QUIRKS)
 		{
 			a.style.display = 'inline';
@@ -876,18 +876,18 @@ GraphViewer.prototype.addToolbar = function()
 		{
 			a.style.display = 'inline-block';
 		}
-		
+
 		var img = document.createElement('img');
 		img.setAttribute('border', '0');
 		img.setAttribute('src', imgSrc);
-		
+
 		if (enabled == null || enabled)
 		{
 			mxEvent.addListener(a, 'mouseenter', function()
 			{
 				a.style.backgroundColor = '#ddd';
 			});
-			
+
 			mxEvent.addListener(a, 'mouseleave', function()
 			{
 				a.style.backgroundColor = '#eee';
@@ -900,30 +900,30 @@ GraphViewer.prototype.addToolbar = function()
 		{
 			mxUtils.setOpacity(a, 30);
 		}
-		
+
 		a.appendChild(img);
 		toolbar.appendChild(a);
-		
+
 		buttonCount++;
-		
+
 		return a;
 	};
 
 	var layersDialog = null;
 	var layersDialogEntered = false;
 	var pageInfo = null;
-	
+
 	for (var i = 0; i < tokens.length; i++)
 	{
 		var token = tokens[i];
-		
+
 		if (token == 'pages')
 		{
 			pageInfo = container.ownerDocument.createElement('div');
 			pageInfo.style.cssText = 'display:inline-block;position:relative;padding:3px 4px 0 4px;' +
 				'vertical-align:top;font-family:Helvetica,Arial;font-size:12px;top:4px;cursor:default;'
 			mxUtils.setOpacity(pageInfo, 70);
-			
+
 			var prevButton = addButton(mxUtils.bind(this, function()
 			{
 				this.selectPage(this.currentPage - 1);
@@ -938,12 +938,12 @@ GraphViewer.prototype.addToolbar = function()
 			{
 				this.selectPage(this.currentPage + 1);
 			}), Editor.nextImage, mxResources.get('nextPage') || 'Next Page');
-			
+
 			nextButton.style.paddingLeft = '0px';
 			nextButton.style.paddingRight = '0px';
-			
+
 			var lastXmlNode = null;
-			
+
 			var update = mxUtils.bind(this, function()
 			{
 				pageInfo.innerHTML = '';
@@ -952,7 +952,7 @@ GraphViewer.prototype.addToolbar = function()
 				prevButton.style.display = pageInfo.style.display;
 				nextButton.style.display = pageInfo.style.display;
 			});
-			
+
 			// LATER: Add event for setGraphXml
 			this.addListener('graphChanged', update);
 			update();
@@ -995,13 +995,13 @@ GraphViewer.prototype.addToolbar = function()
 					else
 					{
 						layersDialog = this.graph.createLayersDialog();
-						
+
 						mxEvent.addListener(layersDialog, 'mouseleave', function()
 						{
 							layersDialog.parentNode.removeChild(layersDialog);
 							layersDialog = null;
 						});
-						
+
 						var r = layersButton.getBoundingClientRect();
 
 						layersDialog.style.width = '140px';
@@ -1015,16 +1015,16 @@ GraphViewer.prototype.addToolbar = function()
 						var origin = mxUtils.getDocumentScrollOrigin(document);
 						layersDialog.style.left = origin.x + r.left + 'px';
 						layersDialog.style.top = origin.y + r.bottom + 'px';
-						
+
 						document.body.appendChild(layersDialog);
 					}
 				}), Editor.layersImage, mxResources.get('layers') || 'Layers');
-				
+
 				model.addListener(mxEvent.CHANGE, function()
 				{
 					layersButton.style.display = (model.getChildCount(model.root) > 1) ? 'inline-block' : 'none';
 				});
-				
+
 				layersButton.style.display = (model.getChildCount(model.root) > 1) ? 'inline-block' : 'none';
 			}
 		}
@@ -1041,7 +1041,7 @@ GraphViewer.prototype.addToolbar = function()
 		else if (this.graphConfig['toolbar-buttons'] != null)
 		{
 			var def = this.graphConfig['toolbar-buttons'][token];
-			
+
 			if (def != null)
 			{
 				addButton((def.enabled == null || def.enabled) ? def.handler : function() {},
@@ -1049,12 +1049,12 @@ GraphViewer.prototype.addToolbar = function()
 			}
 		}
 	}
-	
+
 	if (this.graph.minimumContainerSize != null)
 	{
 		this.graph.minimumContainerSize.width = buttonCount * 34;
 	}
-	
+
 	if (this.graphConfig.title != null)
 	{
 		var filename = container.ownerDocument.createElement('div');
@@ -1063,13 +1063,13 @@ GraphViewer.prototype.addToolbar = function()
 		filename.setAttribute('title', this.graphConfig.title);
 		mxUtils.write(filename, this.graphConfig.title);
 		mxUtils.setOpacity(filename, 70);
-		
+
 		toolbar.appendChild(filename);
 	}
-	
+
 	this.minToolbarWidth = buttonCount * 34;
 	var prevBorder = container.style.border;
-	
+
 	var enter = mxUtils.bind(this, function()
 	{
 		var r = container.getBoundingClientRect();
@@ -1079,12 +1079,12 @@ GraphViewer.prototype.addToolbar = function()
 		var b = (document.body.style.position === 'relative') ? document.body.getBoundingClientRect() :
 			{left: -origin.x, top: -origin.y};
 		r = {left: r.left - b.left, top: r.top - b.top, bottom: r.bottom - b.top, right: r.right - b.left};
-		
+
 		toolbar.style.left = r.left + 'px';
 		toolbar.style.width = (this.graphConfig['toolbar-position'] == 'inline') ? 'auto' :
 			Math.max(this.minToolbarWidth, container.offsetWidth) + 'px';
 		toolbar.style.border = '1px solid #d0d0d0';
-				
+
 		if (this.graphConfig['toolbar-position'] == 'bottom')
 		{
 			toolbar.style.top = r.bottom - 1 + 'px';
@@ -1101,14 +1101,14 @@ GraphViewer.prototype.addToolbar = function()
 				toolbar.style.top = r.top + 'px';
 			}
 		}
-		
+
 		if (prevBorder == '1px solid transparent')
 		{
 			container.style.border = '1px solid #d0d0d0';
 		}
-		
+
 		document.body.appendChild(toolbar);
-		
+
 		var hideToolbar = mxUtils.bind(this, function()
 		{
 			if (this.graphConfig['toolbar-nohide'] != true)
@@ -1117,34 +1117,34 @@ GraphViewer.prototype.addToolbar = function()
 				{
 					toolbar.parentNode.removeChild(toolbar);
 				}
-				
+
 				if (layersDialog != null)
 				{
 					layersDialog.parentNode.removeChild(layersDialog);
 					layersDialog = null;
 				}
-				
+
 				container.style.border = prevBorder;
 			}
 		});
-		
+
 		mxEvent.addListener(document, 'mousemove', function(evt)
 		{
 			var source = mxEvent.getSource(evt);
-			
+
 			while (source != null)
 			{
 				if (source == container || source == toolbar || source == layersDialog)
 				{
 					return;
 				}
-				
+
 				source = source.parentNode;
 			}
-			
+
 			hideToolbar();
 		});
-		
+
 		mxEvent.addListener(document, 'mouseleave', function(evt)
 		{
 			hideToolbar();
@@ -1166,13 +1166,13 @@ GraphViewer.prototype.addClickHandler = function(graph, ui)
 		if (href == null)
 		{
 			var source = mxEvent.getSource(evt);
-		
+
 			if (source.nodeName.toLowerCase() == 'a')
 			{
 				href = source.getAttribute('href');
 			}
 		}
-		
+
 		if (ui != null)
 		{
 			if (href != null && !(graph.isExternalProtocol(href) || graph.isBlankLink(href)))
@@ -1220,14 +1220,14 @@ GraphViewer.prototype.showLightbox = function(editable, closable, target)
 					this.graphConfig.editable : true);
 			closable = (closable != null) ? closable : true;
 			target = (target != null) ? target : 'blank';
-			
+
 			var param = {'client': 1, 'lightbox': 1, 'target': target};
-		    
+
 			if (editable)
 			{
 				param.edit = this.graphConfig.edit || '_blank';
 			}
-		    
+
 			if (closable)
 			{
 		    		param.close = 1;
@@ -1237,24 +1237,24 @@ GraphViewer.prototype.showLightbox = function(editable, closable, target)
 			{
 		    		param.layers = 1;
 			}
-			
+
 			if (this.graphConfig != null && this.graphConfig.nav != false)
 			{
 				param.nav = 1;
 			}
-			
+
 			if (this.graphConfig != null && this.graphConfig.highlight != null)
 			{
 				param.highlight = this.graphConfig.highlight.substring(1);
 			}
-			
+
 			if (this.currentPage != null && this.currentPage > 0)
 			{
 				param.page = this.currentPage;
 			}
 
 			if (typeof window.postMessage !== 'undefined' && (document.documentMode == null || document.documentMode >= 10))
-			{	
+			{
 				if (this.lightboxWindow == null)
 				{
 					mxEvent.addListener(window, 'message', mxUtils.bind(this, function(evt)
@@ -1263,7 +1263,7 @@ GraphViewer.prototype.showLightbox = function(editable, closable, target)
 						{
 							this.lightboxWindow.postMessage(this.xml, '*');
 						}
-					}));					
+					}));
 				}
 			}
 			else
@@ -1271,16 +1271,16 @@ GraphViewer.prototype.showLightbox = function(editable, closable, target)
 				// Data is pulled from global variable after tab loads
 				param.data = encodeURIComponent(this.xml);
 			}
-			
+
 			var domain = 'www.draw.io';
-			
-			if (urlParams['dev'] == '1')
+
+			if ('1' == '1')
 			{
 				param.dev = '1';
 				param.drawdev = '1';
 				domain = 'test.draw.io';
 			}
-			
+
 		    this.lightboxWindow = window.open('https://' + domain +
 		    		'/#P' + encodeURIComponent(JSON.stringify(param)));
 		}
@@ -1315,13 +1315,13 @@ GraphViewer.prototype.showLocalLightbox = function()
 	backdrop.style.zIndex = this.lightboxZIndex;
 	backdrop.style.backgroundColor = '#000000';
 	mxUtils.setOpacity(backdrop, 70);
-	
+
 	document.body.appendChild(backdrop);
-	
+
 	var closeImg = document.createElement('img');
 	closeImg.setAttribute('border', '0');
 	closeImg.setAttribute('src', Editor.closeImage);
-	
+
 	if (mxClient.IS_QUIRKS)
 	{
 		closeImg.style.position = 'absolute';
@@ -1332,43 +1332,43 @@ GraphViewer.prototype.showLocalLightbox = function()
 	{
 		closeImg.style.cssText = 'position:fixed;top:32px;right:32px;';
 	}
-	
+
 	closeImg.style.cursor = 'pointer';
-	
+
 	mxEvent.addListener(closeImg, 'click', function()
 	{
 		ui.destroy();
 	});
-	
+
 	// LATER: Make possible to assign after instance was created
 	urlParams['pages'] = '1';
 	urlParams['page'] = this.currentPage;
 	urlParams['nav'] = (this.graphConfig.nav != false) ? '1' : '0';
 	urlParams['layers'] = (this.layersEnabled) ? '1' : '0';
-	
+
 	// PostMessage not working and Permission denied for opened access in IE9-
 	if (document.documentMode == null || document.documentMode >= 10)
 	{
 		Editor.prototype.editButtonLink = this.graphConfig.edit;
 		Editor.prototype.editButtonFunc = this.graphConfig.editFunc;
 	}
-	
+
 	EditorUi.prototype.updateActionStates = function() {};
 	EditorUi.prototype.addBeforeUnloadListener = function() {};
 	EditorUi.prototype.addChromelessClickHandler = function() {};
-	
+
 	// Workaround for lost reference with same ID (cannot override after instance is created)
 	Graph.prototype.shadowId = 'lightboxDropShadow';
-	
+
 	var ui = new EditorUi(new Editor(true), document.createElement('div'), true);
 	ui.editor.editBlankUrl = this.editBlankUrl;
-	
+
 	// Workaround for lost reference with same ID
 	Graph.prototype.shadowId = 'dropShadow';
-	
+
 	// Disables refresh
 	ui.refresh = function() {};
-	
+
 	// Handles escape keystroke
 	var keydownHandler = mxUtils.bind(this, function(evt)
 	{
@@ -1386,14 +1386,14 @@ GraphViewer.prototype.showLocalLightbox = function()
 		document.body.removeChild(closeImg);
 		document.body.style.overflow = 'auto';
 		GraphViewer.resizeSensorEnabled = true;
-		
+
 		destroy.apply(this, arguments);
 	};
-	
+
 	var graph = ui.editor.graph;
 	var lightbox = graph.container;
 	lightbox.style.overflow = 'hidden';
-	
+
 	if (this.lightboxChrome)
 	{
 		lightbox.style.border = '1px solid #c0c0c0';
@@ -1407,30 +1407,30 @@ GraphViewer.prototype.showLocalLightbox = function()
 		backdrop.style.display = 'none';
 		closeImg.style.display = 'none';
 	}
-	
+
 	// Handles relative images
 	var self = this;
-	
+
 	graph.getImageFromBundles = function(key)
 	{
 		return self.getImageUrl(key);
 	};
-	
+
 	// Handles relative images in print output and temporary graphs
 	var uiCreateTemporaryGraph = ui.createTemporaryGraph;
-	
+
 	ui.createTemporaryGraph = function()
 	{
 		var graph = uiCreateTemporaryGraph.apply(this, arguments);
-		
+
 		graph.getImageFromBundles = function(key)
 		{
 			return self.getImageUrl(key);
 		};
-		
+
 		return graph;
 	};
-	
+
 	if (this.graphConfig.move)
 	{
 		graph.isMoveCellsEvent = function(evt)
@@ -1438,13 +1438,13 @@ GraphViewer.prototype.showLocalLightbox = function()
 			return true;
 		};
 	}
-	
+
 	if (!mxClient.IS_QUIRKS)
 	{
 		mxUtils.setPrefixedStyle(lightbox.style, 'border-radius', '4px');
 		lightbox.style.position = 'fixed';
 	}
-	
+
 	GraphViewer.resizeSensorEnabled = false;
 	document.body.style.overflow = 'hidden';
 
@@ -1454,7 +1454,7 @@ GraphViewer.prototype.showLocalLightbox = function()
 		mxUtils.setPrefixedStyle(lightbox.style, 'transform', 'rotateY(90deg)');
 		mxUtils.setPrefixedStyle(lightbox.style, 'transition', 'all .25s ease-in-out');
 	}
-	
+
 	this.addClickHandler(graph, ui);
 
 	window.setTimeout(mxUtils.bind(this, function()
@@ -1466,21 +1466,21 @@ GraphViewer.prototype.showLocalLightbox = function()
 
 		document.body.appendChild(lightbox);
 		document.body.appendChild(closeImg);
-		
+
 		ui.setFileData(this.xml);
 
 		mxUtils.setPrefixedStyle(lightbox.style, 'transform', 'rotateY(0deg)');
 		ui.chromelessToolbar.style.bottom = 60 + 'px';
 		ui.chromelessToolbar.style.zIndex = this.lightboxZIndex;
-		
+
 		// Workaround for clipping in IE11-
 		document.body.appendChild(ui.chromelessToolbar);
-	
+
 		ui.getEditBlankXml = mxUtils.bind(this, function()
 		{
 			return this.xml;
 		});
-	
+
 		if (mxClient.IS_QUIRKS)
 		{
 			lightbox.style.position = 'absolute';
@@ -1490,18 +1490,18 @@ GraphViewer.prototype.showLocalLightbox = function()
 			lightbox.style.width = document.body.clientWidth - 80 + 'px';
 			lightbox.style.height = document.body.clientHeight - 80 + 'px';
 			lightbox.style.backgroundColor = 'white';
-			
+
 			ui.chromelessToolbar.style.display = 'block';
 			ui.chromelessToolbar.style.position = 'absolute';
 			ui.chromelessToolbar.style.bottom = '';
 			ui.chromelessToolbar.style.top = origin.y +
 				document.body.clientHeight - 100 + 'px';
 		}
-		
+
 		ui.lightboxFit();
 		ui.chromelessResize();
 		this.showLayers(graph, this.graph);
-		
+
 		// Click on backdrop closes lightbox
 		mxEvent.addListener(backdrop, 'click', function()
 		{
@@ -1513,7 +1513,7 @@ GraphViewer.prototype.showLocalLightbox = function()
 };
 
 /**
- * 
+ *
  */
 GraphViewer.processElements = function(classname)
 {
@@ -1540,22 +1540,22 @@ GraphViewer.getElementsByClassName = function(classname)
 	if (document.getElementsByClassName)
 	{
 		var divs = document.getElementsByClassName(classname);
-		
+
 		// Workaround for changing divs while processing
 		var result = [];
-		
+
 		for (var i = 0; i < divs.length; i++)
 		{
 			result.push(divs[i]);
 		}
-		
+
 		return result;
 	}
 	else
 	{
 		var tmp = document.getElementsByTagName('*');
 		var divs = [];
-	
+
 		for (var i = 0; i < tmp.length; i++)
 		{
 			var cls = tmp[i].className;
@@ -1563,7 +1563,7 @@ GraphViewer.getElementsByClassName = function(classname)
 			if (cls != null && cls.length > 0)
 			{
 				var tokens = cls.split(' ');
-				
+
 				if (mxUtils.indexOf(tokens, classname) >= 0)
 				{
 					divs.push(tmp[i]);
@@ -1581,16 +1581,16 @@ GraphViewer.getElementsByClassName = function(classname)
 GraphViewer.createViewerForElement = function(element, callback)
 {
 	var data = element.getAttribute('data-mxgraph');
-	
+
 	if (data != null)
 	{
 		var config = JSON.parse(data);
-		
+
 		var createViewer = function(xml)
 		{
 			var xmlDoc = mxUtils.parseXml(xml);
 			var viewer = new GraphViewer(element, xmlDoc.documentElement, config);
-			
+
 			if (callback != null)
 			{
 				callback(viewer);
@@ -1711,12 +1711,12 @@ GraphViewer.getUrl = function(url, onload, onerror)
 	{
 		var xhr = (navigator.userAgent.indexOf('MSIE 9') > 0) ? new XDomainRequest() : new XMLHttpRequest();
 		xhr.open('GET', url);
-		
+
 	    xhr.onload = function()
 	    {
 	    	onload((xhr.getText != null) ? xhr.getText() : xhr.responseText);
 		};
-		
+
 	    xhr.onerror = onerror;
 	    xhr.send();
 	}
@@ -1758,7 +1758,7 @@ GraphViewer.useResizeSensor = true;
      * @constructor
      */
     var ResizeSensor = function(element, fn) {
-    	
+
     	var callback = function()
     	{
     		if (GraphViewer.resizeSensorEnabled)
@@ -1766,7 +1766,7 @@ GraphViewer.useResizeSensor = true;
     			fn();
     		}
     	};
-    	
+
         /**
          *
          * @constructor

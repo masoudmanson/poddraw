@@ -80,6 +80,26 @@ App = function(editor, container, lightbox) {
         });
     }
 
+    // Process the queue for waiting plugins
+    if (App.PodFunctions != null) {
+        for (var i = 0; i < App.PodFunctions.length; i++) {
+            try {
+                App.PodFunctions[i](this);
+            }
+            catch (e) {
+                if (window.console != null) {
+                    console.log('Pod Function Error:', e, App.PodFunctions[i]);
+                }
+            }
+        }
+
+        // Installs global callback for plugins
+        window.Draw.loadPodFunctions = mxUtils.bind(this, function(callback) {
+            callback(this);
+        });
+    }
+
+
     this.load();
 };
 
@@ -403,6 +423,7 @@ App.main = function(callback, createUi) {
     }
 
     if (window.mxscript != null) {
+
         // Injects offline dependencies
         if (urlParams['offline'] == '1' || urlParams['appcache'] == '1') {
             mxscript('js/shapes.min.js');
@@ -429,7 +450,10 @@ App.main = function(callback, createUi) {
             var plugins = (mxSettings.settings != null) ? mxSettings.getPlugins() : null;
             var pluginsLoaded = {};
             var temp = urlParams['p'];
+
+            window.Draw = new Object();
             App.initPluginCallback();
+            App.initPodFunctionsCallback();
 
             if (temp != null) {
                 // Used to request draw.io sources in dev mode
@@ -506,14 +530,14 @@ App.main = function(callback, createUi) {
      * Asynchronous MathJax extension.
      */
     if (urlParams['math'] != '0') {
-        Editor.initMath();
+        Editor.initMath(POD_DRAW_URL+'/js/MathJax.js');
     }
 
     function doLoad(bundle) {
         // Prefetches asynchronous requests so that below code runs synchronous
         // Loading the correct bundle (one file) via the fallback system in mxResources. The stylesheet
         // is compiled into JS in the build process and is only needed for local development.
-        mxUtils.getAll((urlParams['dev'] != '1')
+        mxUtils.getAll(('1' != '1')
             ? [bundle]
             : [
                 bundle,
@@ -725,9 +749,21 @@ App.initPluginCallback = function() {
 
         // Global entry point for plugins is Draw.loadPlugin. This is the only
         // long-term supported solution for access to the EditorUi instance.
-        window.Draw = new Object();
+        // window.Draw = new Object();
         window.Draw.loadPlugin = function(callback) {
             App.DrawPlugins.push(callback);
+        };
+    }
+};
+
+App.initPodFunctionsCallback = function() {
+    if (App.PodFunctions == null) {
+        App.PodFunctions = [];
+
+        // window.Draw = new Object();
+
+        window.Draw.loadPodFunctions = function(callback) {
+            App.PodFunctions.push(callback);
         };
     }
 };
@@ -1074,7 +1110,7 @@ App.prototype.getPusher = function() {
 App.prototype.checkLicense = function() {
 
     // 	var driveUser = this.drive.getUser();
-    // 	var email = ((urlParams['dev'] == '1') ? urlParams['lic'] : null) ||
+    // 	var email = (('1' == '1') ? urlParams['lic'] : null) ||
     // 		((driveUser != null) ? driveUser.email : null);
     //
     // 	if (!this.isOffline() && !this.editor.chromeless && email != null)
@@ -4233,7 +4269,7 @@ App.prototype.updateHeader = function() {
         this.toggleFormatElement.style.height = '16px';
         this.toggleFormatElement.style.backgroundPosition = '50% 50%';
         this.toggleFormatElement.style.backgroundRepeat = 'no-repeat';
-        this.toolbarContainer.appendChild(this.toggleFormatElement);
+        // this.toolbarContainer.appendChild(this.toggleFormatElement);
 
         if (uiTheme == 'dark') {
             this.toggleFormatElement.style.filter = 'invert(100%)';
@@ -4272,7 +4308,7 @@ App.prototype.updateHeader = function() {
         this.fullscreenElement.style.backgroundPosition = '50% 50%';
         this.fullscreenElement.style.backgroundRepeat = 'no-repeat';
         this.fullscreenElement.style.backgroundImage = 'url(\'' + this.fullscreenImage + '\')';
-        this.toolbarContainer.appendChild(this.fullscreenElement);
+        // this.toolbarContainer.appendChild(this.fullscreenElement);
 
         var initialPosition = this.hsplitPosition;
         var collapsed = false;
@@ -4337,7 +4373,7 @@ App.prototype.updateHeader = function() {
             }));
 
             if (uiTheme != 'atlas') {
-                this.toolbarContainer.appendChild(this.toggleElement);
+                // this.toolbarContainer.appendChild(this.toggleElement);
             }
 
             // Enable compact mode for small screens
