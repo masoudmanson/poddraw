@@ -7,7 +7,7 @@
 	/**
 	 * Version
 	 */
-	EditorUi.VERSION = '1.0.0';
+	EditorUi.VERSION = '2.0.0';
 
 	/**
 	 * Overrides compact UI setting.
